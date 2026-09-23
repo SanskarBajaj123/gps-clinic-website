@@ -10,8 +10,6 @@ wp-content/uploads/
 wp-content/debug.log
 *.log
 
-# WordPress config with credentials (use wp-config.php.example instead)
-wp-config.php
 
 # Cache & generated files
 wp-content/cache/
