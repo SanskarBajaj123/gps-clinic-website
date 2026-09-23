@@ -1,0 +1,32 @@
+# WordPress database (SQLite)
+wp-content/database/*.db
+wp-content/database/*.db-shm
+wp-content/database/*.db-wal
+
+# Uploads & media
+wp-content/uploads/
+
+# Debug & logs
+wp-content/debug.log
+*.log
+
+# WordPress config with credentials (use wp-config.php.example instead)
+wp-config.php
+
+# Cache & generated files
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+
+# System & editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Node (if ever used for build tools)
+node_modules/
