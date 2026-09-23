@@ -81,12 +81,20 @@ get_header(); ?>
       <h2>Trusted Brands We Supply</h2>
       <p style="color:var(--mid);max-width:520px;margin:12px auto 0;">We are authorised distributors for leading GPS hardware manufacturers - all devices are genuine, warrantied, and AIS 140 approved where applicable.</p>
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;">
+    <div class="brand-grid">
       <?php
-      $brands = ['Concox','Queclink','Teltonika','Coban','Jimi IoT','Suntech'];
-      foreach ($brands as $b) : ?>
-      <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:20px 32px;font-weight:600;color:var(--navy);font-family:'Outfit',sans-serif;">
-        <?php echo esc_html($b); ?>
+      $brands = [
+        'Concox'    => 'concox.svg',
+        'Queclink'  => 'queclink.svg',
+        'Teltonika' => 'teltonika.svg',
+        'Coban'     => 'coban.svg',
+        'Jimi IoT'  => 'jimi-iot.svg',
+        'Suntech'   => 'suntech.svg',
+      ];
+      $img_base = get_template_directory_uri() . '/assets/images/brands/';
+      foreach ($brands as $name => $file) : ?>
+      <div class="brand-card">
+        <img src="<?php echo esc_url( $img_base . $file ); ?>" alt="<?php echo esc_attr($name); ?> logo" width="140" height="48" loading="lazy">
       </div>
       <?php endforeach; ?>
     </div>

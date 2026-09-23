@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 56" fill="none">
+  <!-- Blue shield / signal arc mark -->
+  <circle cx="22" cy="28" r="10" fill="none" stroke="#0057B8" stroke-width="2.5"/>
+  <circle cx="22" cy="28" r="6" fill="none" stroke="#0057B8" stroke-width="2"/>
+  <circle cx="22" cy="28" r="2.5" fill="#0057B8"/>
+  <line x1="22" y1="18" x2="22" y2="13" stroke="#0057B8" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Wordmark -->
+  <text x="40" y="35" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="22" fill="#0057B8" letter-spacing="-0.5">Concox</text>
+</svg>

@@ -1286,6 +1286,48 @@ p { line-height: 1.7; }
 }
 
 /* ─────────────────────────────────────────────────
+   BRAND PARTNER GRID
+───────────────────────────────────────────────── */
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  align-items: center;
+}
+.brand-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s, transform 0.18s;
+  min-height: 80px;
+}
+.brand-card:hover {
+  box-shadow: 0 6px 20px rgba(11,29,53,0.10);
+  transform: translateY(-2px);
+}
+.brand-card img {
+  max-width: 130px;
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: grayscale(20%);
+  transition: filter 0.2s;
+}
+.brand-card:hover img {
+  filter: grayscale(0%);
+}
+@media (max-width: 900px) {
+  .brand-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 560px) {
+  .brand-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ──────────────────────────────────────────────────
    SOLUTION ARCHIVE TILES
 ───────────────────────────────────────────────── */
 .sol-grid {

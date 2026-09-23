@@ -30,6 +30,15 @@ function gpsclinic_setup() {
 add_action( 'after_setup_theme', 'gpsclinic_setup' );
 
 
+// ─── Favicon ────────────────────────────────────────────────────────────────
+function gpsclinic_favicon() {
+    $uri = get_template_directory_uri();
+    echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( $uri . '/assets/images/favicon.svg' ) . '">' . "\n";
+    echo '<link rel="shortcut icon" href="' . esc_url( $uri . '/assets/images/favicon.svg' ) . '">' . "\n";
+}
+add_action( 'wp_head', 'gpsclinic_favicon', 1 );
+
+
 // ─── Enqueue Assets ─────────────────────────────────────────────────────────
 function gpsclinic_enqueue() {
     // Google Fonts
