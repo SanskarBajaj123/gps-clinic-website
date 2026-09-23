@@ -1,5 +1,4 @@
-# WordPress database (SQLite)
-wp-content/database/*.db
+# SQLite WAL/SHM temp files only (the .db itself is committed so Docker bakes in content)
 wp-content/database/*.db-shm
 wp-content/database/*.db-wal
 
