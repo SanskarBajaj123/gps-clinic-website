@@ -41,6 +41,11 @@ define( 'SECURE_AUTH_SALT', getenv('SECURE_AUTH_SALT') ?: 'gps-clinic-local-secu
 define( 'LOGGED_IN_SALT',   getenv('LOGGED_IN_SALT')   ?: 'gps-clinic-local-logged-in-salt' );
 define( 'NONCE_SALT',       getenv('NONCE_SALT')       ?: 'gps-clinic-local-nonce-salt' );
 
+/* ── Reverse-proxy HTTPS detection (Render terminates SSL at the edge) ── */
+if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https' ) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 if ( ! defined( 'ABSPATH' ) ) {
     define( 'ABSPATH', __DIR__ . '/' );
 }
