@@ -1449,6 +1449,7 @@ p { line-height: 1.7; }
 @media (max-width: 860px) {
   .split-flex { flex-direction: column; gap: 32px; }
   .hero-flex  { flex-direction: column; }
+  .hero-left  { flex: none; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
   .hero-right { flex: none; width: 100%; }
   .g-solutions{ grid-template-columns: 1fr; }
   .g-4cols    { grid-template-columns: repeat(2, 1fr); }
@@ -1605,3 +1606,27 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .contact-info-item, .contact-detail { cursor: pointer; border-radius: 8px; transition: opacity .15s ease; }
 .contact-info-item:hover, .contact-detail:hover { opacity: 0.8; }
+
+/* ── Hero quick-jump chips (mobile only) ─────────────────────────────────── */
+.hero-jumplinks { display: none; }
+
+@media (max-width: 640px) {
+  /* Offset anchor targets so the sticky header doesn't cover the section title */
+  section[id] { scroll-margin-top: 76px; }
+
+  .hero-jumplinks {
+    display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    margin-top: 18px; padding-bottom: 4px; scrollbar-width: none;
+    width: 100%; min-width: 0; max-width: 100vw;
+  }
+  .hero-left { min-width: 0; }
+  .home-hero, .hero-flex, .container.hero-flex { overflow-x: hidden; max-width: 100%; }
+  .hero-jumplinks::-webkit-scrollbar { display: none; }
+  .hero-jumplinks a {
+    flex-shrink: 0; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.8);
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    border-radius: 20px; padding: 7px 14px; white-space: nowrap;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .hero-jumplinks a:hover, .hero-jumplinks a:active { background: rgba(242,100,25,.18); border-color: var(--orange); color: #fff; }
+}
