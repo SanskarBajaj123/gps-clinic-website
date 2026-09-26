@@ -22,7 +22,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--mid); line-height: 1.7; }
-a { color: inherit; text-decoration: none; }
+a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; }
 img { max-width: 100%; display: block; }
 button { cursor: pointer; }
 ul { list-style: none; }
@@ -1533,8 +1533,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .nav-dropdown-menu a {
   display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: 6px;
   color: var(--text) !important; font-size: 13.5px; font-weight: 600; border-bottom: none !important;
+  border: 1px solid transparent; -webkit-tap-highlight-color: transparent;
 }
 .nav-dropdown-menu a:hover { background: var(--bg); color: var(--orange) !important; }
+/* Tap/click feedback: an outline, not a solid fill — avoids white-on-white on touch devices */
+.nav-dropdown-menu a:active { background: transparent; border-color: var(--orange); }
 .nav-dropdown-menu a svg { flex-shrink: 0; color: var(--teal); }
 
 /* Mobile: dropdown becomes an inline expandable list */
@@ -1546,6 +1549,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .mobile-nav .nav-dropdown.open .nav-dropdown-menu { display: block; }
 .mobile-nav .nav-dropdown-menu a { color: rgba(255,255,255,0.75) !important; padding: 8px 6px; }
+.mobile-nav .nav-dropdown-menu a:hover,
+.mobile-nav .nav-dropdown-menu a:active {
+  background: transparent; border-color: rgba(255,255,255,0.6); color: #fff !important;
+}
 
 /* ── icon-left card layout (Industries page, etc.) — extracted from inline styles so it can go responsive ── */
 .icon-card-row { display: flex; align-items: flex-start; gap: 20px; }

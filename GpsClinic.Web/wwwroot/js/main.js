@@ -21,6 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
       const open = mobileNav.classList.toggle('open');
       burger.setAttribute('aria-expanded', open);
     });
+
+    // Close the mobile menu once any actual destination link is tapped
+    // (but not the "Login" dropdown toggle, which only opens its submenu).
+    mobileNav.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (!link || link.getAttribute('role') === 'button') return;
+      mobileNav.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    });
   }
 
   // ── Login nav dropdown (click/tap toggle; hover still works via CSS) ──
