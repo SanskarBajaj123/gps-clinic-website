@@ -72,6 +72,7 @@ a { color: inherit; }
 .a-form-row label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--a-text); }
 .a-form-row .a-hint { font-size: 12px; color: var(--a-muted); margin-top: 4px; }
 .a-form-row input[type=text], .a-form-row input[type=number], .a-form-row input[type=email],
+.a-form-row input[type=password], .a-form-row input[type=tel], .a-form-row input[type=url],
 .a-form-row textarea, .a-form-row select {
   width: 100%; padding: 10px 12px; border: 1px solid var(--a-border); border-radius: 8px; font-size: 14px; font-family: inherit; background: #fff;
 }
@@ -96,10 +97,24 @@ a { color: inherit; }
 .a-alert--success { background: #DCFCE7; color: #15803D; }
 .a-alert--error { background: #FEF2F2; color: var(--a-danger); }
 
-.a-login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--a-navy); }
-.a-login-card { background: #fff; border-radius: 14px; padding: 40px; width: 360px; }
-.a-login-card h1 { font-family: 'Outfit', sans-serif; font-size: 20px; margin: 0 0 4px; }
+.a-login-wrap {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(160deg, var(--a-navy) 0%, #132b4d 100%); padding: 24px;
+}
+.a-login-card { background: #fff; border-radius: 16px; padding: 40px; width: 380px; max-width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+.a-login-card h1 { font-family: 'Outfit', sans-serif; font-size: 21px; margin: 0 0 4px; }
 .a-login-card p { font-size: 13px; color: var(--a-muted); margin: 0 0 24px; }
+
+.a-password-field { position: relative; }
+.a-password-field input { padding-right: 42px; }
+.a-password-toggle {
+  position: absolute; top: 50%; right: 4px; transform: translateY(-50%);
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  background: none; border: none; border-radius: 6px; color: var(--a-muted); cursor: pointer;
+  transition: color .15s ease, background .15s ease;
+}
+.a-password-toggle:hover { color: var(--a-text); background: var(--a-bg); }
+.a-password-toggle:focus-visible { outline: 2px solid var(--a-orange); outline-offset: 1px; }
 
 @media (max-width: 860px) {
   .admin-sidebar { display: none; }
