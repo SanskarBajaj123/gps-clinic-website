@@ -16,7 +16,8 @@
 </head>
 <body class="admin-body">
 <div class="admin-shell">
-  <aside class="admin-sidebar">
+  <div class="admin-sidebar-backdrop" id="admin-sidebar-backdrop"></div>
+  <aside class="admin-sidebar" id="admin-sidebar">
     <div class="admin-sidebar-brand">GPS <span>Clinic</span> Admin</div>
     <nav class="admin-nav" hx-target="#admin-main" hx-swap="innerHTML" hx-push-url="true">
       <a href="/admin" hx-get="/admin" class="@(path == "/admin" || path == "/admin/dashboard" ? "active" : "")">Overview</a>
@@ -45,6 +46,9 @@
 
   <main class="admin-main">
     <div class="admin-topbar">
+      <button class="admin-burger" id="admin-burger" aria-label="Toggle menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <h1>GPS Clinic Content Manager</h1>
     </div>
     <div id="admin-main" class="admin-content">
@@ -66,6 +70,34 @@
   }
   document.addEventListener('DOMContentLoaded', function () { initQuillEditors(document); });
   document.body.addEventListener('htmx:afterSwap', function (evt) { initQuillEditors(evt.target); });
+
+  // Mobile sidebar drawer
+  (function () {
+    var burger = document.getElementById('admin-burger');
+    var sidebar = document.getElementById('admin-sidebar');
+    var backdrop = document.getElementById('admin-sidebar-backdrop');
+    if (!burger || !sidebar || !backdrop) return;
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }
+    function openSidebar() {
+      sidebar.classList.add('open');
+      backdrop.classList.add('open');
+      burger.setAttribute('aria-expanded', 'true');
+    }
+
+    burger.addEventListener('click', function () {
+      sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    backdrop.addEventListener('click', closeSidebar);
+    // Close after picking a section (htmx swap) so the drawer doesn't linger
+    sidebar.addEventListener('click', function (e) {
+      if (e.target.closest('a')) closeSidebar();
+    });
+  })();
 </script>
 </body>
 </html>
