@@ -1,0 +1,31 @@
+@model GpsClinic.Web.Areas.Admin.Controllers.DashboardViewModel
+
+<div class="a-stat-grid">
+  <div class="a-stat"><div class="a-stat-num">@Model.HardwareCount</div><div class="a-stat-lbl">Hardware Products</div></div>
+  <div class="a-stat"><div class="a-stat-num">@Model.SolutionCount</div><div class="a-stat-lbl">Software Solutions</div></div>
+  <div class="a-stat"><div class="a-stat-num">@Model.IndustryCount</div><div class="a-stat-lbl">Industries</div></div>
+  <div class="a-stat"><div class="a-stat-num">@Model.BlogCount</div><div class="a-stat-lbl">Blog Posts</div></div>
+  <div class="a-stat"><div class="a-stat-num">@Model.UnreadEnquiries</div><div class="a-stat-lbl">Unread Enquiries</div></div>
+</div>
+
+<div class="a-card">
+  <div class="a-page-head"><h2>Recent Enquiries</h2><a href="/admin/enquiries" hx-get="/admin/enquiries" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">View all →</a></div>
+  @if (Model.RecentEnquiries.Any())
+  {
+    <table class="a-table">
+      <thead><tr><th>Name</th><th>Mobile</th><th>Product</th><th>Submitted</th></tr></thead>
+      <tbody>
+        @foreach (var e in Model.RecentEnquiries)
+        {
+          <tr><td>@e.Name</td><td>@e.Mobile</td><td>@e.Product</td><td>@e.SubmittedAt.ToString("MMM d, HH:mm")</td></tr>
+        }
+      </tbody>
+    </table>
+  }
+  else
+  {
+    <p class="a-empty">No enquiries yet.</p>
+  }
+</div>
+
+<p style="color:var(--a-muted);font-size:13px;">Use the sidebar to manage hardware, solutions, blog posts, pages, FAQs, testimonials, and homepage settings. Every change here reflects on the live site immediately.</p>

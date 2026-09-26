@@ -1,0 +1,47 @@
+@model List<SolutionProduct>
+@{ ViewData["Title"] = "GPS Tracking Software Solutions"; }
+
+<section class="page-hero">
+  <div class="container page-hero-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Software Solutions</span></nav>
+    <span class="section-label section-label--teal" style="font-size:11px;letter-spacing:0.1em;">Software</span>
+    <h1>GPS Tracking <span>Solutions</span></h1>
+    <p>Purpose-built platforms for schools, logistics, healthcare, government, and 17+ industries. Powered by GPS Clinic.</p>
+  </div>
+</section>
+
+<section class="archive-section">
+  <div class="container">
+    @if (Model.Any())
+    {
+      <div class="sol-grid">
+        @foreach (var sol in Model)
+        {
+          var tags = (sol.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToList();
+          <article class="sol-tile">
+            <a href="/solutions/@sol.Slug" class="sol-tile-top" style="background:@IconHelper.Gradient(sol.IconKey);" aria-hidden="true" tabindex="-1">
+              <div class="sol-tile-circle sol-tile-circle--1"></div>
+              <div class="sol-tile-circle sol-tile-circle--2"></div>
+              <svg class="sol-tile-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" aria-hidden="true">@Html.Raw(IconHelper.Path(sol.IconKey))</svg>
+            </a>
+            <div class="sol-tile-body">
+              <h3><a href="/solutions/@sol.Slug">@sol.Title</a></h3>
+              @if (tags.Any())
+              {
+                <div class="card-tags" style="margin-top:auto;padding-top:8px;">
+                  @foreach (var tag in tags) { <span class="card-tag">@tag</span> }
+                </div>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+    else
+    {
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">Solutions coming soon. <a href="/contact">Contact us</a> to enquire.</p>
+    }
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Need a Custom Solution?", "We integrate and configure GPS software for your specific workflow. Let us build the right solution for your fleet.", "Discuss Your Needs"))

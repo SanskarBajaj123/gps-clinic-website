@@ -1,0 +1,18 @@
+@model List<Page>
+<div class="a-page-head"><h2>Pages</h2></div>
+<table class="a-table">
+  <thead><tr><th>Title</th><th>URL</th><th>Last Updated</th><th></th></tr></thead>
+  <tbody>
+    @foreach (var p in Model)
+    {
+      <tr>
+        <td><strong>@p.Title</strong></td>
+        <td>/@p.Slug</td>
+        <td>@p.UpdatedAt.ToString("MMM d, yyyy")</td>
+        <td class="a-actions">
+          <a href="/admin/pages/@p.Id/edit" hx-get="/admin/pages/@p.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

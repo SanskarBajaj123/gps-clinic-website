@@ -1,0 +1,32 @@
+@model List<ContactSubmission>
+<div class="a-page-head"><h2>Enquiries</h2></div>
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th>Status</th><th>Name</th><th>Mobile</th><th>City</th><th>Product</th><th>Message</th><th>Submitted</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var e in Model)
+      {
+        <tr>
+          <td><span class="a-badge @(e.IsRead ? "a-badge--off" : "a-badge--on")">@(e.IsRead ? "Read" : "New")</span></td>
+          <td><strong>@e.Name</strong>@(string.IsNullOrEmpty(e.Email) ? "" : $" ({e.Email})")</td>
+          <td>@e.Mobile</td>
+          <td>@e.City</td>
+          <td>@e.Product</td>
+          <td style="max-width:260px;">@e.Message</td>
+          <td>@e.SubmittedAt.ToString("MMM d, HH:mm")</td>
+          <td class="a-actions">
+            @if (!e.IsRead)
+            {
+              <form hx-post="/admin/enquiries/@e.Id/read" hx-target="#admin-main">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="a-btn a-btn--ghost a-btn--sm">Mark Read</button>
+              </form>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else { <p class="a-empty">No enquiries yet.</p> }

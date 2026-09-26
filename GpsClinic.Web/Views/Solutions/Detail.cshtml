@@ -1,0 +1,52 @@
+@model SolutionProduct
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = Model.Title;
+    var whatsapp = (await Db.SiteSettings.FindAsync(SiteSettingKeys.ContactWhatsApp))?.Value ?? "919260202020";
+    var tags = (Model.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+}
+
+<section class="page-hero">
+  <div class="container page-hero-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/solutions">Solutions</a><span class="bc-sep">›</span><span>@Model.Title</span></nav>
+    @if (!string.IsNullOrEmpty(Model.Industry))
+    {
+      <span style="display:inline-block;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;background:rgba(0,164,154,0.12);border:1px solid rgba(0,164,154,0.28);border-radius:20px;padding:4px 12px;">@Model.Industry</span>
+    }
+    <h1>@Model.Title</h1>
+    @if (!string.IsNullOrEmpty(Model.Tagline)) { <p>@Model.Tagline</p> }
+    @if (tags.Any())
+    {
+      <div class="card-tags" style="margin-top:16px;">
+        @foreach (var tag in tags) { <span class="card-tag" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">@tag</span> }
+      </div>
+    }
+  </div>
+</section>
+
+<section style="background:var(--bg);padding:72px 24px;">
+  <div class="container">
+    <div class="split-flex">
+      <div style="flex:1;" class="post-content">
+        @Html.Raw(Model.ContentHtml)
+        <div class="gps-disclaimer" style="margin-top:32px;">
+          <p><strong>GPS Accuracy Notice:</strong> GPS tracking accuracy depends on satellite signal availability and environmental conditions. Typical accuracy is 5–10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.</p>
+        </div>
+      </div>
+      <div style="flex:0 0 300px;">
+        @{ ViewData["FormHeading"] = "Get a Demo"; ViewData["FormSub"] = "We'll set up a live demo for your team."; ViewData["SubmitLabel"] = "Request Demo"; }
+        @await Html.PartialAsync("_EnquiryForm", Model.Title + " (Solution)")
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hw-cta-band">
+  <h2>Interested in @Model.Title?</h2>
+  <p>Let's set up a live demo. No commitment required.</p>
+  <div class="btn-row">
+    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">WhatsApp Us</a>
+    <a href="/contact" class="btn btn--orange">Contact Us</a>
+    <a href="/solutions" class="btn btn--ghost">All Solutions</a>
+  </div>
+</section>

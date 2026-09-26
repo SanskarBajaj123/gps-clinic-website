@@ -1,0 +1,29 @@
+@model List<WhyUsFeature>
+<div class="a-page-head">
+  <h2>Why Us Features</h2>
+  <a href="/admin/whyus/create" hx-get="/admin/whyus/create" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--primary">+ Add Feature</a>
+</div>
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th>Title</th><th>Description</th><th>Order</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var f in Model)
+      {
+        <tr>
+          <td><strong>@f.Title</strong></td>
+          <td>@f.Description</td>
+          <td>@f.SortOrder</td>
+          <td class="a-actions">
+            <a href="/admin/whyus/@f.Id/edit" hx-get="/admin/whyus/@f.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+            <form hx-post="/admin/whyus/@f.Id/delete" hx-target="#admin-main" hx-confirm="Delete this feature?">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else { <p class="a-empty">No features yet.</p> }

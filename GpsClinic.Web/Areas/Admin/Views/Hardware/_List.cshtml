@@ -1,0 +1,38 @@
+@model List<HardwareProduct>
+<div class="a-page-head">
+  <h2>Hardware Products</h2>
+  <a href="/admin/hardware/create" hx-get="/admin/hardware/create" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--primary">+ Add Hardware Product</a>
+</div>
+
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th></th><th>Title</th><th>Tagline</th><th>Order</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var hw in Model)
+      {
+        <tr>
+          <td>
+            @if (!string.IsNullOrEmpty(hw.CardImagePath)) { <img class="a-thumb" src="@hw.CardImagePath" alt=""> }
+            else { <div class="a-thumb"></div> }
+          </td>
+          <td><strong>@hw.Title</strong><div style="color:var(--a-muted);font-size:12px;">/hardware/@hw.Slug</div></td>
+          <td>@hw.Tagline</td>
+          <td>@hw.SortOrder</td>
+          <td><span class="a-badge @(hw.IsPublished ? "a-badge--on" : "a-badge--off")">@(hw.IsPublished ? "Published" : "Hidden")</span></td>
+          <td class="a-actions">
+            <a href="/admin/hardware/@hw.Id/edit" hx-get="/admin/hardware/@hw.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+            <form hx-post="/admin/hardware/@hw.Id/delete" hx-target="#admin-main" hx-confirm="Delete '@hw.Title'? This cannot be undone.">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else
+{
+  <p class="a-empty">No hardware products yet.</p>
+}

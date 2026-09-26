@@ -1,0 +1,38 @@
+@model List<BlogPost>
+<div class="a-page-head">
+  <h2>Blog Posts</h2>
+  <a href="/admin/blog/create" hx-get="/admin/blog/create" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--primary">+ Add Blog Post</a>
+</div>
+
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th></th><th>Title</th><th>Author</th><th>Published</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var post in Model)
+      {
+        <tr>
+          <td>
+            @if (!string.IsNullOrEmpty(post.FeaturedImagePath)) { <img class="a-thumb" src="@post.FeaturedImagePath" alt=""> }
+            else { <div class="a-thumb"></div> }
+          </td>
+          <td><strong>@post.Title</strong><div style="color:var(--a-muted);font-size:12px;">/blog/@post.Slug</div></td>
+          <td>@post.Author</td>
+          <td>@post.PublishedAt.ToString("MMM d, yyyy")</td>
+          <td><span class="a-badge @(post.IsPublished ? "a-badge--on" : "a-badge--off")">@(post.IsPublished ? "Published" : "Draft")</span></td>
+          <td class="a-actions">
+            <a href="/admin/blog/@post.Id/edit" hx-get="/admin/blog/@post.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+            <form hx-post="/admin/blog/@post.Id/delete" hx-target="#admin-main" hx-confirm="Delete '@post.Title'?">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else
+{
+  <p class="a-empty">No blog posts yet.</p>
+}

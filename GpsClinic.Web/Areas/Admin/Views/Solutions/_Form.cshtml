@@ -1,0 +1,63 @@
+@model SolutionProduct
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/solutions/create" : $"/admin/solutions/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Solution" : $"Edit: {Model.Title}")</h2>
+  <a href="/admin/solutions" hx-get="/admin/solutions" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back to list</a>
+</div>
+
+<form class="a-card" hx-post="@action" hx-target="#admin-main" hx-swap="innerHTML">
+  @Html.AntiForgeryToken()
+
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Title *</label><input type="text" name="Title" value="@Model.Title" required></div>
+    <div class="a-form-row"><label>URL Slug</label><input type="text" name="Slug" value="@Model.Slug" placeholder="auto-generated from title if left blank"></div>
+  </div>
+
+  <div class="a-form-row"><label>Tagline</label><input type="text" name="Tagline" value="@Model.Tagline"></div>
+
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Tags (comma-separated)</label><input type="text" name="Tags" value="@Model.Tags" placeholder="Schools, RFID, Parent App"></div>
+    <div class="a-form-row"><label>Primary Industry</label><input type="text" name="Industry" value="@Model.Industry" placeholder="e.g. Schools & Buses"></div>
+  </div>
+
+  <div class="a-form-row">
+    <label>Icon / Card Gradient</label>
+    <select name="IconKey">
+      @foreach (var key in new[] { "gps", "video", "bell", "lock", "pin", "map", "user", "thermo", "box", "fuel", "cross", "bus", "group" })
+      {
+        <option value="@key" selected="@(Model.IconKey == key)">@key</option>
+      }
+    </select>
+  </div>
+
+  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (optional, overrides gradient tile)"; ViewData["Folder"] = "solutions"; }
+  @await Html.PartialAsync("_ImageUploadField", Model.CardImagePath)
+
+  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (optional, solution detail page)"; ViewData["Folder"] = "solutions"; }
+  @await Html.PartialAsync("_ImageUploadField", Model.HeroImagePath)
+
+  <div class="a-form-row">
+    <label>Solution Page Content</label>
+    <input type="hidden" name="ContentHtml" id="sol-content-hidden" value="@Model.ContentHtml">
+    <div class="js-richtext" data-target="sol-content-hidden" style="background:#fff;min-height:180px;">@Html.Raw(Model.ContentHtml)</div>
+  </div>
+
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Sort Order</label><input type="number" name="SortOrder" value="@Model.SortOrder"></div>
+    <div class="a-form-row">
+      <label>&nbsp;</label>
+      <div class="a-checkbox-row">
+        <input type="checkbox" name="IsPublished" value="true" id="sol-published" checked="@Model.IsPublished">
+        <label for="sol-published" style="margin:0;">Published (visible on live site)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Solution</button>
+    <a href="/admin/solutions" hx-get="/admin/solutions" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

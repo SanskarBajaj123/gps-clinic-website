@@ -1,0 +1,35 @@
+@model List<SolutionProduct>
+<div class="a-page-head">
+  <h2>Software Solutions</h2>
+  <a href="/admin/solutions/create" hx-get="/admin/solutions/create" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--primary">+ Add Solution</a>
+</div>
+
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th>Title</th><th>Industry</th><th>Tagline</th><th>Order</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var sol in Model)
+      {
+        <tr>
+          <td><strong>@sol.Title</strong><div style="color:var(--a-muted);font-size:12px;">/solutions/@sol.Slug</div></td>
+          <td>@sol.Industry</td>
+          <td>@sol.Tagline</td>
+          <td>@sol.SortOrder</td>
+          <td><span class="a-badge @(sol.IsPublished ? "a-badge--on" : "a-badge--off")">@(sol.IsPublished ? "Published" : "Hidden")</span></td>
+          <td class="a-actions">
+            <a href="/admin/solutions/@sol.Id/edit" hx-get="/admin/solutions/@sol.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+            <form hx-post="/admin/solutions/@sol.Id/delete" hx-target="#admin-main" hx-confirm="Delete '@sol.Title'? This cannot be undone.">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else
+{
+  <p class="a-empty">No solutions yet.</p>
+}

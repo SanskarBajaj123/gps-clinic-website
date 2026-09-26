@@ -1,0 +1,43 @@
+@model BlogPost
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/blog/create" : $"/admin/blog/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Blog Post" : $"Edit: {Model.Title}")</h2>
+  <a href="/admin/blog" hx-get="/admin/blog" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back to list</a>
+</div>
+
+<form class="a-card" hx-post="@action" hx-target="#admin-main" hx-swap="innerHTML">
+  @Html.AntiForgeryToken()
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Title *</label><input type="text" name="Title" value="@Model.Title" required></div>
+    <div class="a-form-row"><label>URL Slug</label><input type="text" name="Slug" value="@Model.Slug"></div>
+  </div>
+  <div class="a-form-row"><label>Excerpt</label><textarea name="Excerpt" rows="2">@Model.Excerpt</textarea></div>
+
+  @{ ViewData["FieldName"] = "FeaturedImagePath"; ViewData["FieldLabel"] = "Featured Image"; ViewData["Folder"] = "blog"; }
+  @await Html.PartialAsync("_ImageUploadField", Model.FeaturedImagePath)
+
+  <div class="a-form-row">
+    <label>Post Content</label>
+    <input type="hidden" name="ContentHtml" id="blog-content-hidden" value="@Model.ContentHtml">
+    <div class="js-richtext" data-target="blog-content-hidden" style="background:#fff;min-height:240px;">@Html.Raw(Model.ContentHtml)</div>
+  </div>
+
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Author</label><input type="text" name="Author" value="@Model.Author"></div>
+    <div class="a-form-row">
+      <label>&nbsp;</label>
+      <div class="a-checkbox-row">
+        <input type="checkbox" name="IsPublished" value="true" id="blog-published" checked="@Model.IsPublished">
+        <label for="blog-published" style="margin:0;">Published</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Post</button>
+    <a href="/admin/blog" hx-get="/admin/blog" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,45 @@
+@model Industry
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/industries/create" : $"/admin/industries/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Industry" : $"Edit: {Model.Name}")</h2>
+  <a href="/admin/industries" hx-get="/admin/industries" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back to list</a>
+</div>
+
+<form class="a-card" hx-post="@action" hx-target="#admin-main" hx-swap="innerHTML">
+  @Html.AntiForgeryToken()
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Name *</label><input type="text" name="Name" value="@Model.Name" required></div>
+    <div class="a-form-row"><label>URL Slug</label><input type="text" name="Slug" value="@Model.Slug"></div>
+  </div>
+  <div class="a-form-row"><label>Tagline</label><input type="text" name="Tagline" value="@Model.Tagline"></div>
+  <div class="a-form-row"><label>Description</label><textarea name="Description" rows="3">@Model.Description</textarea></div>
+  <div class="a-form-row">
+    <label>Feature Bullets (one per line)</label>
+    <textarea name="Features" rows="6">@Model.Features</textarea>
+  </div>
+  <div class="a-form-grid">
+    <div class="a-form-row">
+      <label>Icon</label>
+      <select name="IconKey">
+        @foreach (var key in new[] { "school", "logistics", "construction", "ambulance", "fuel", "container", "pharma", "employee", "municipal", "fmcg", "mining", "agriculture", "hospitality", "utilities", "security", "university", "healthcare" })
+        {
+          <option value="@key" selected="@(Model.IconKey == key)">@key</option>
+        }
+      </select>
+    </div>
+    <div class="a-form-row"><label>Sort Order</label><input type="number" name="SortOrder" value="@Model.SortOrder"></div>
+  </div>
+  <div class="a-form-row">
+    <div class="a-checkbox-row">
+      <input type="checkbox" name="ShowOnHome" value="true" id="ind-home" checked="@Model.ShowOnHome">
+      <label for="ind-home" style="margin:0;">Feature on homepage industries grid</label>
+    </div>
+  </div>
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Industry</button>
+    <a href="/admin/industries" hx-get="/admin/industries" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

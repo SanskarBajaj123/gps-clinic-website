@@ -1,0 +1,44 @@
+@model List<Industry>
+@{ ViewData["Title"] = "Industries We Serve"; }
+
+<section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Industries</span></nav>
+    <h1 style="color:var(--white);margin-top:16px;">Industries We <span style="color:var(--orange);">Serve</span></h1>
+    <p style="color:var(--muted);font-size:1.1rem;max-width:600px;margin-top:12px;">GPS Clinic configures tracking solutions for 17+ industries across Maharashtra. Each deployment is set up for the specific workflows, compliance requirements, and reporting needs of that sector.</p>
+  </div>
+</section>
+
+<section class="section" style="padding:72px 0;">
+  <div class="container">
+    <div class="g-2cols" style="gap:32px;">
+      @foreach (var ind in Model)
+      {
+        var features = (ind.Features ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        <div class="card" style="padding:36px 32px;">
+          <div style="display:flex;align-items:flex-start;gap:20px;">
+            <div style="flex-shrink:0;width:52px;height:52px;color:var(--orange);opacity:.9;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">@Html.Raw(IconHelper.Path(ind.IconKey))</svg>
+            </div>
+            <div style="min-width:0;">
+              <h3 style="font-size:1.15rem;margin-bottom:4px;">@ind.Name</h3>
+              <p style="color:var(--orange);font-size:.82rem;font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em;">@ind.Tagline</p>
+              <p style="color:var(--mid);font-size:.88rem;line-height:1.65;margin-bottom:16px;">@ind.Description</p>
+              <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;">
+                @foreach (var f in features)
+                {
+                  <li style="display:flex;align-items:flex-start;gap:8px;font-size:.84rem;color:var(--text);">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" style="flex-shrink:0;margin-top:2px;" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    @f
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Do Not See Your Industry?", "We configure solutions for any business that operates vehicles or mobile assets. Call us to discuss your requirements.", "Discuss Your Requirements"))

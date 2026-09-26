@@ -1,0 +1,81 @@
+@model HardwareProduct
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/hardware/create" : $"/admin/hardware/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Hardware Product" : $"Edit: {Model.Title}")</h2>
+  <a href="/admin/hardware" hx-get="/admin/hardware" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back to list</a>
+</div>
+
+<form class="a-card" hx-post="@action" hx-target="#admin-main" hx-swap="innerHTML">
+  @Html.AntiForgeryToken()
+
+  <div class="a-form-grid">
+    <div class="a-form-row">
+      <label>Title *</label>
+      <input type="text" name="Title" value="@Model.Title" required>
+    </div>
+    <div class="a-form-row">
+      <label>URL Slug</label>
+      <input type="text" name="Slug" value="@Model.Slug" placeholder="auto-generated from title if left blank">
+    </div>
+  </div>
+
+  <div class="a-form-row">
+    <label>Tagline</label>
+    <input type="text" name="Tagline" value="@Model.Tagline" placeholder="e.g. Reliable tracking for everyday fleet needs">
+  </div>
+
+  <div class="a-form-grid">
+    <div class="a-form-row">
+      <label>Tags (comma-separated)</label>
+      <input type="text" name="Tags" value="@Model.Tags" placeholder="2G, Budget-Friendly, Real-Time">
+    </div>
+    <div class="a-form-row">
+      <label>Icon</label>
+      <select name="IconKey">
+        @foreach (var key in new[] { "gps", "video", "bell", "lock", "pin", "map", "user", "thermo", "box", "fuel", "cross", "bus", "group" })
+        {
+          <option value="@key" selected="@(Model.IconKey == key)">@key</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="a-form-row">
+    <label>Orange Band Features (comma-separated, shown below the hero on the product page)</label>
+    <input type="text" name="BandItems" value="@Model.BandItems" placeholder="1-2 Hour Installation, No SIM Required, AIS 140 Compliant">
+  </div>
+
+  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (used in product grids)"; ViewData["Folder"] = "hardware"; }
+  @await Html.PartialAsync("_ImageUploadField", Model.CardImagePath)
+
+  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (used on the product detail page)"; ViewData["Folder"] = "hardware"; }
+  @await Html.PartialAsync("_ImageUploadField", Model.HeroImagePath)
+
+  <div class="a-form-row">
+    <label>Product Page Content</label>
+    <input type="hidden" name="ContentHtml" id="hw-content-hidden" value="@Model.ContentHtml">
+    <div class="js-richtext" data-target="hw-content-hidden" style="background:#fff;min-height:180px;">@Html.Raw(Model.ContentHtml)</div>
+  </div>
+
+  <div class="a-form-grid">
+    <div class="a-form-row">
+      <label>Sort Order</label>
+      <input type="number" name="SortOrder" value="@Model.SortOrder">
+    </div>
+    <div class="a-form-row">
+      <label>&nbsp;</label>
+      <div class="a-checkbox-row">
+        <input type="checkbox" name="IsPublished" value="true" id="hw-published" checked="@Model.IsPublished">
+        <label for="hw-published" style="margin:0;">Published (visible on live site)</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Hardware Product</button>
+    <a href="/admin/hardware" hx-get="/admin/hardware" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

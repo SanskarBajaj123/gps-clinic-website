@@ -1,0 +1,20 @@
+@model Page
+<div class="a-page-head">
+  <h2>Edit: @Model.Title</h2>
+  <a href="/admin/pages" hx-get="/admin/pages" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back to list</a>
+</div>
+
+<form class="a-card" hx-post="/admin/pages/@Model.Id/edit" hx-target="#admin-main" hx-swap="innerHTML">
+  @Html.AntiForgeryToken()
+  <div class="a-form-row"><label>Subtitle (shown under the page heading)</label><input type="text" name="Subtitle" value="@Model.Subtitle"></div>
+  <div class="a-form-row"><label>Meta Description (SEO)</label><input type="text" name="MetaDescription" value="@Model.MetaDescription"></div>
+  <div class="a-form-row">
+    <label>Page Content</label>
+    <input type="hidden" name="ContentHtml" id="page-content-hidden" value="@Model.ContentHtml">
+    <div class="js-richtext" data-target="page-content-hidden" style="background:#fff;min-height:320px;">@Html.Raw(Model.ContentHtml)</div>
+  </div>
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Page</button>
+    <a href="/admin/pages" hx-get="/admin/pages" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

@@ -1,0 +1,29 @@
+@model List<Testimonial>
+<div class="a-page-head">
+  <h2>Testimonials</h2>
+  <a href="/admin/testimonials/create" hx-get="/admin/testimonials/create" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--primary">+ Add Testimonial</a>
+</div>
+@if (Model.Any())
+{
+  <table class="a-table">
+    <thead><tr><th>Name</th><th>Role</th><th>Quote</th><th></th></tr></thead>
+    <tbody>
+      @foreach (var t in Model)
+      {
+        <tr>
+          <td><strong>@t.Name</strong></td>
+          <td>@t.Role</td>
+          <td style="max-width:360px;">@(t.Quote.Length > 80 ? t.Quote.Substring(0, 80) + "…" : t.Quote)</td>
+          <td class="a-actions">
+            <a href="/admin/testimonials/@t.Id/edit" hx-get="/admin/testimonials/@t.Id/edit" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost a-btn--sm">Edit</a>
+            <form hx-post="/admin/testimonials/@t.Id/delete" hx-target="#admin-main" hx-confirm="Delete this testimonial?">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+else { <p class="a-empty">No testimonials yet.</p> }

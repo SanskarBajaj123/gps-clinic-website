@@ -1,0 +1,39 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "Admin Login";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Login - GPS Clinic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800&family=DM+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+</head>
+<body class="admin-body">
+  <div class="a-login-wrap">
+    <div class="a-login-card">
+      <h1>GPS Clinic Admin</h1>
+      <p>Sign in to manage hardware, solutions, blog, and site content.</p>
+      @if (!ViewData.ModelState.IsValid)
+      {
+        <div class="a-alert a-alert--error">Invalid email or password.</div>
+      }
+      <form method="post" action="/admin/login">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div class="a-form-row">
+          <label>Email</label>
+          <input type="email" name="email" required autofocus value="admin@gpsclinic.co.in">
+        </div>
+        <div class="a-form-row">
+          <label>Password</label>
+          <input type="password" name="password" required>
+        </div>
+        <button type="submit" class="a-btn a-btn--primary" style="width:100%;justify-content:center;padding:11px;">Sign In</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

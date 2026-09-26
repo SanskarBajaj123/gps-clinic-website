@@ -1,0 +1,46 @@
+@model List<FaqCategory>
+<div class="a-page-head"><h2>FAQ</h2></div>
+
+<div class="a-card">
+  <form hx-post="/admin/faq/category/create" hx-target="#admin-main" style="display:flex;gap:10px;align-items:end;">
+    @Html.AntiForgeryToken()
+    <div class="a-form-row" style="flex:1;margin:0;"><label>New Category Name</label><input type="text" name="name" placeholder="e.g. Installation" required></div>
+    <button type="submit" class="a-btn a-btn--primary">Add Category</button>
+  </form>
+</div>
+
+@foreach (var cat in Model.OrderBy(c => c.SortOrder))
+{
+  <div class="a-card">
+    <div class="a-page-head" style="margin-bottom:12px;">
+      <h2 style="font-size:16px;">@cat.Name <span style="color:var(--a-muted);font-weight:400;font-size:13px;">(@cat.Items.Count questions)</span></h2>
+      <form hx-post="/admin/faq/category/@cat.Id/delete" hx-target="#admin-main" hx-confirm="Delete category '@cat.Name' and all its questions?">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="a-btn a-btn--danger a-btn--sm">Delete Category</button>
+      </form>
+    </div>
+
+    @foreach (var item in cat.Items.OrderBy(i => i.SortOrder))
+    {
+      <details style="border:1px solid var(--a-border);border-radius:8px;padding:10px 14px;margin-bottom:8px;">
+        <summary style="cursor:pointer;font-weight:600;font-size:14px;">@item.Question</summary>
+        <form hx-post="/admin/faq/items/@item.Id/edit" hx-target="#admin-main" style="margin-top:12px;">
+          @Html.AntiForgeryToken()
+          <div class="a-form-row"><label>Question</label><input type="text" name="question" value="@item.Question" required></div>
+          <div class="a-form-row"><label>Answer</label><textarea name="answer" rows="3" required>@item.Answer</textarea></div>
+          <div class="a-form-actions">
+            <button type="submit" class="a-btn a-btn--primary a-btn--sm">Save</button>
+            <button type="submit" formaction="/admin/faq/items/@item.Id/delete" class="a-btn a-btn--danger a-btn--sm">Delete</button>
+          </div>
+        </form>
+      </details>
+    }
+
+    <form hx-post="/admin/faq/category/@cat.Id/items/create" hx-target="#admin-main" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--a-border);">
+      @Html.AntiForgeryToken()
+      <div class="a-form-row"><label>New Question</label><input type="text" name="question" placeholder="Question" required></div>
+      <div class="a-form-row"><label>Answer</label><textarea name="answer" rows="2" placeholder="Answer" required></textarea></div>
+      <button type="submit" class="a-btn a-btn--ghost a-btn--sm">+ Add Question to @cat.Name</button>
+    </form>
+  </div>
+}

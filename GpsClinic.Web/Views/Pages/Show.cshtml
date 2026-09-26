@@ -1,0 +1,42 @@
+@model Page
+@{ ViewData["Title"] = Model.Title; ViewData["Description"] = Model.MetaDescription; }
+
+<section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>@Model.Title</span></nav>
+    <h1 style="color:var(--white);margin-top:16px;">@Model.Title</h1>
+    @if (!string.IsNullOrEmpty(Model.Subtitle))
+    {
+      <p style="color:var(--muted);font-size:1.05rem;max-width:600px;margin-top:12px;">@Model.Subtitle</p>
+    }
+  </div>
+</section>
+
+<section class="section" style="padding:72px 0;">
+  <div class="container" style="max-width:800px;">
+    @if (Model.Slug == "about-us")
+    {
+      <div class="post-content">@Html.Raw(Model.ContentHtml)</div>
+
+      <div style="margin-top:56px;">
+        <div style="text-align:center;margin-bottom:32px;">
+          <span class="section-eyebrow">Hardware Partners</span>
+          <h2>Trusted Brands We Supply</h2>
+        </div>
+        <div class="brand-grid">
+          @foreach (var (name, file) in new[] { ("Concox","concox.svg"), ("Queclink","queclink.svg"), ("Teltonika","teltonika.svg"), ("Coban","coban.svg"), ("Jimi IoT","jimi-iot.svg"), ("Suntech","suntech.svg") })
+          {
+            <div class="brand-card"><img src="/images/brands/@file" alt="@name logo" width="140" height="48" loading="lazy"></div>
+          }
+        </div>
+        <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:24px;">Brand names are used for identification only. GPS Clinic is an independent reseller and integrator.</p>
+      </div>
+    }
+    else
+    {
+      <div class="post-content">@Html.Raw(Model.ContentHtml)</div>
+    }
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Ready to Get Started?", "Get a free site visit, device demo, or same-day quotation from our local team.", (string?)null))

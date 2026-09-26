@@ -1,0 +1,40 @@
+@model List<BlogPost>
+@{ ViewData["Title"] = "Blog"; }
+
+<section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Blog</span></nav>
+    <h1 style="color:var(--white);margin-top:16px;">GPS Clinic <span style="color:var(--orange);">Blog</span></h1>
+    <p style="color:var(--muted);font-size:1.1rem;max-width:540px;margin-top:12px;">News, guides, and updates on GPS tracking, fleet management, and AIS 140 compliance.</p>
+  </div>
+</section>
+
+<section class="section" style="padding:72px 0;">
+  <div class="container">
+    @if (Model.Any())
+    {
+      <div class="blog-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;">
+        @foreach (var post in Model)
+        {
+          <article class="card" style="padding:0;overflow:hidden;">
+            @if (!string.IsNullOrEmpty(post.FeaturedImagePath))
+            {
+              <img src="@post.FeaturedImagePath" alt="@post.Title" style="width:100%;height:180px;object-fit:cover;">
+            }
+            <div style="padding:24px;">
+              <h3 style="font-size:1.1rem;margin-bottom:8px;"><a href="/blog/@post.Slug">@post.Title</a></h3>
+              <p style="color:var(--mid);font-size:.9rem;">@post.Excerpt</p>
+              <p style="color:var(--muted);font-size:.8rem;margin-top:12px;">@post.PublishedAt.ToString("MMM d, yyyy") · @post.Author</p>
+            </div>
+          </article>
+        }
+      </div>
+    }
+    else
+    {
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">No blog posts yet - check back soon.</p>
+    }
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Ready to Track Your Fleet?", "Get a free demo, site visit, or same-day quote from our local team.", (string?)null))

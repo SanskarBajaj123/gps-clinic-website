@@ -1,0 +1,22 @@
+@model BlogPost
+@{ ViewData["Title"] = Model.Title; }
+
+<section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/blog">Blog</a><span class="bc-sep">›</span><span>@Model.Title</span></nav>
+    <h1 style="color:var(--white);margin-top:16px;">@Model.Title</h1>
+    <p style="color:var(--muted);font-size:.95rem;margin-top:10px;">@Model.PublishedAt.ToString("MMMM d, yyyy") · @Model.Author</p>
+  </div>
+</section>
+
+<section class="section" style="padding:72px 0;">
+  <div class="container" style="max-width:760px;">
+    @if (!string.IsNullOrEmpty(Model.FeaturedImagePath))
+    {
+      <img src="@Model.FeaturedImagePath" alt="@Model.Title" style="width:100%;border-radius:12px;margin-bottom:32px;">
+    }
+    <div class="post-content">@Html.Raw(Model.ContentHtml)</div>
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Ready to Track Your Fleet?", "Get a free demo, site visit, or same-day quote from our local team.", (string?)null))

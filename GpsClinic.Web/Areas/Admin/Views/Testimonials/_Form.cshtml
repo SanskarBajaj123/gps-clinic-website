@@ -1,0 +1,25 @@
+@model Testimonial
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/testimonials/create" : $"/admin/testimonials/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Testimonial" : "Edit Testimonial")</h2>
+  <a href="/admin/testimonials" hx-get="/admin/testimonials" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back</a>
+</div>
+<form class="a-card" hx-post="@action" hx-target="#admin-main">
+  @Html.AntiForgeryToken()
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Name *</label><input type="text" name="Name" value="@Model.Name" required></div>
+    <div class="a-form-row"><label>Role / Company</label><input type="text" name="Role" value="@Model.Role"></div>
+  </div>
+  <div class="a-form-row"><label>Quote *</label><textarea name="Quote" rows="4" required>@Model.Quote</textarea></div>
+  <div class="a-form-grid">
+    <div class="a-form-row"><label>Rating (1-5)</label><input type="number" name="Rating" min="1" max="5" value="@Model.Rating"></div>
+    <div class="a-form-row"><label>Sort Order</label><input type="number" name="SortOrder" value="@Model.SortOrder"></div>
+  </div>
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save</button>
+    <a href="/admin/testimonials" hx-get="/admin/testimonials" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

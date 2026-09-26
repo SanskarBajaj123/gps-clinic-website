@@ -1,0 +1,55 @@
+@model List<HardwareProduct>
+@{ ViewData["Title"] = "GPS Tracking Hardware"; }
+
+<section class="page-hero">
+  <div class="container page-hero-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Hardware Products</span></nav>
+    <span class="section-label section-label--orange" style="font-size:11px;letter-spacing:0.1em;">Hardware</span>
+    <h1>GPS Tracking <span>Hardware</span></h1>
+    <p>AIS 140 certified devices for every vehicle type. Wired, OBD, solar, and 4G - all with same-day installation across Maharashtra.</p>
+  </div>
+</section>
+
+<section class="archive-section">
+  <div class="container">
+    @if (Model.Any())
+    {
+      <div class="g-products">
+        @foreach (var hw in Model)
+        {
+          var tags = (hw.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToList();
+          <article class="product-card">
+            <div class="product-card-img">
+              @if (!string.IsNullOrEmpty(hw.CardImagePath))
+              {
+                <a href="/hardware/@hw.Slug"><img src="@hw.CardImagePath" alt="@hw.Title" loading="lazy"></a>
+              }
+              else
+              {
+                <a href="/hardware/@hw.Slug" class="product-card-img-fallback">
+                  <div class="icon-circle"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">@Html.Raw(IconHelper.Path(hw.IconKey))</svg></div>
+                </a>
+              }
+            </div>
+            <div class="product-card-body">
+              <h3><a href="/hardware/@hw.Slug">@hw.Title</a></h3>
+              <p>@hw.Tagline</p>
+              @if (tags.Any())
+              {
+                <div class="card-tags">
+                  @for (int i = 0; i < tags.Count; i++) { <span class="card-tag@(i == 0 ? " card-tag--orange" : "")">@tags[i]</span> }
+                </div>
+              }
+            </div>
+          </article>
+        }
+      </div>
+    }
+    else
+    {
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">Hardware products coming soon. <a href="/contact">Contact us</a> to enquire.</p>
+    }
+  </div>
+</section>
+
+@await Html.PartialAsync("_CtaBand", ("Not Sure Which Device You Need?", "Tell us your vehicle type and use case - we will recommend the right hardware and install it for you.", "Get a Recommendation"))

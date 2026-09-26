@@ -1,0 +1,19 @@
+@model WhyUsFeature
+@{
+    var isNew = Model.Id == 0;
+    var action = isNew ? "/admin/whyus/create" : $"/admin/whyus/{Model.Id}/edit";
+}
+<div class="a-page-head">
+  <h2>@(isNew ? "New Feature" : "Edit Feature")</h2>
+  <a href="/admin/whyus" hx-get="/admin/whyus" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">← Back</a>
+</div>
+<form class="a-card" hx-post="@action" hx-target="#admin-main">
+  @Html.AntiForgeryToken()
+  <div class="a-form-row"><label>Title *</label><input type="text" name="Title" value="@Model.Title" required></div>
+  <div class="a-form-row"><label>Description *</label><textarea name="Description" rows="3" required>@Model.Description</textarea></div>
+  <div class="a-form-row"><label>Sort Order</label><input type="number" name="SortOrder" value="@Model.SortOrder"></div>
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save</button>
+    <a href="/admin/whyus" hx-get="/admin/whyus" hx-target="#admin-main" hx-push-url="true" class="a-btn a-btn--ghost">Cancel</a>
+  </div>
+</form>

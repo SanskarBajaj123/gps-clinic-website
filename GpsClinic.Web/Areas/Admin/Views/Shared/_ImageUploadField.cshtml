@@ -1,0 +1,46 @@
+@model string
+@{
+    var fieldName = ViewData["FieldName"] as string ?? "ImagePath";
+    var label = ViewData["FieldLabel"] as string ?? "Image";
+    var folder = ViewData["Folder"] as string ?? "general";
+    var inputId = $"img-{fieldName}-{Guid.NewGuid():N}".Substring(0, 24);
+}
+<div class="a-form-row">
+  <label>@label</label>
+  <div class="a-thumb-upload">
+    <img id="@inputId-preview" src="@(string.IsNullOrEmpty(Model) ? "" : Model)" style="@(string.IsNullOrEmpty(Model) ? "display:none;" : "")" alt="">
+    <div>
+      <input type="hidden" name="@fieldName" id="@inputId-value" value="@Model" />
+      <input type="file" accept="image/*" id="@inputId-file">
+      <p class="a-hint">Uploads immediately and fills the field below.</p>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var fileInput = document.getElementById('@inputId-file');
+  var valueInput = document.getElementById('@inputId-value');
+  var preview = document.getElementById('@inputId-preview');
+  if (!fileInput) return;
+  fileInput.addEventListener('change', function () {
+    var file = fileInput.files[0];
+    if (!file) return;
+    var fd = new FormData();
+    fd.append('file', file);
+    fd.append('folder', '@folder');
+    var token = document.querySelector('input[name="__RequestVerificationToken"]');
+    if (token) fd.append('__RequestVerificationToken', token.value);
+    fetch('/admin/media/upload', { method: 'POST', body: fd })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) {
+          valueInput.value = data.url;
+          preview.src = data.url;
+          preview.style.display = '';
+        } else {
+          alert(data.message || 'Upload failed.');
+        }
+      });
+  });
+})();
+</script>

@@ -1,0 +1,29 @@
+@model Dictionary<string, string>
+<div class="a-page-head"><h2>Site Settings</h2></div>
+
+@if (ViewData["Saved"] is true)
+{
+  <div class="a-alert a-alert--success">Settings saved.</div>
+}
+
+<form class="a-card" hx-post="/admin/settings" hx-target="#admin-main">
+  @Html.AntiForgeryToken()
+  @foreach (var (key, label, def) in SiteSettingKeys.All)
+  {
+    var value = Model.TryGetValue(key, out var v) ? v : def;
+    <div class="a-form-row">
+      <label>@label</label>
+      @if (label.Contains("Subheadline") || label.Contains("Address"))
+      {
+        <textarea name="@key" rows="2">@value</textarea>
+      }
+      else
+      {
+        <input type="text" name="@key" value="@value">
+      }
+    </div>
+  }
+  <div class="a-form-actions">
+    <button type="submit" class="a-btn a-btn--primary">Save Settings</button>
+  </div>
+</form>

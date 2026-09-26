@@ -1,0 +1,94 @@
+@model HardwareProduct
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = Model.Title;
+    var whatsapp = (await Db.SiteSettings.FindAsync(SiteSettingKeys.ContactWhatsApp))?.Value ?? "919260202020";
+    var tags = (Model.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+    var band = (Model.BandItems ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+}
+
+<section class="hw-hero-section">
+  <div class="container hw-hero-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/hardware">Hardware</a><span class="bc-sep">›</span><span>@Model.Title</span></nav>
+
+    <div class="hero-flex" style="align-items:flex-end;">
+      <div class="hero-left" style="padding-bottom:48px;">
+        <span class="hw-category-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
+          Hardware Product
+        </span>
+        <h1 class="hero-h1" style="margin-bottom:14px;">@Model.Title</h1>
+        @if (!string.IsNullOrEmpty(Model.Tagline)) { <p class="hero-sub">@Model.Tagline</p> }
+        @if (tags.Any())
+        {
+          <div class="card-tags" style="margin-bottom:28px;">
+            @for (int i = 0; i < tags.Count; i++)
+            {
+              <span style="font-size:12px;font-weight:600;padding:5px 14px;border-radius:20px;@(i == 0 ? "background:rgba(242,100,25,0.12);border:1px solid rgba(242,100,25,0.25);color:#F26419;" : "background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);")">@tags[i]</span>
+            }
+          </div>
+        }
+        <div class="hero-ctas">
+          <a href="https://wa.me/@whatsapp?text=I+am+interested+in+@Uri.EscapeDataString(Model.Title)" class="btn btn--green" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.476 2 2 6.478 2 12.002c0 1.97.56 3.807 1.533 5.367L2 22l4.784-1.525A9.942 9.942 0 0011.998 22c5.523 0 9.999-4.477 9.999-10.002C21.997 6.476 17.521 2 11.998 2z"/></svg>
+            Enquire on WhatsApp
+          </a>
+          <a href="/contact" class="btn btn--orange">Get a Quote</a>
+          <a href="/hardware" class="btn btn--ghost">← All Hardware</a>
+        </div>
+      </div>
+      <div class="hero-right hw-hero-img-wrap">
+        @if (!string.IsNullOrEmpty(Model.HeroImagePath))
+        {
+          <img src="@Model.HeroImagePath" alt="@Model.Title" loading="eager">
+        }
+        else
+        {
+          <div class="hw-hero-img-placeholder"><span>Product image coming soon</span></div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+@if (band.Any())
+{
+  <div class="orange-band">
+    <div class="container orange-band-inner">
+      @foreach (var item in band)
+      {
+        <div class="orange-band-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          @item
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<section class="hw-features-section">
+  <div class="container">
+    <div class="split-flex">
+      <div style="flex:1;">
+        <div class="post-content">@Html.Raw(Model.ContentHtml)</div>
+        <div class="gps-disclaimer" style="margin-top:32px;">
+          <p><strong>GPS Accuracy Notice:</strong> GPS tracking accuracy is dependent on satellite signal availability, environmental factors (tall buildings, tunnels, dense vegetation), and device firmware. Typical accuracy is 5–10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.</p>
+        </div>
+      </div>
+      <div style="flex:0 0 300px;">
+        @{ ViewData["FormHeading"] = "Enquire About This Product"; ViewData["FormSub"] = "We'll call you back within 4 hours."; ViewData["SubmitLabel"] = "Send Enquiry"; }
+        @await Html.PartialAsync("_EnquiryForm", Model.Title)
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hw-cta-band">
+  <h2>Ready to Install @Model.Title?</h2>
+  <p>Our technicians cover Chhatrapati Sambhajinagar and surrounding districts.</p>
+  <div class="btn-row">
+    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">WhatsApp Us</a>
+    <a href="/contact" class="btn btn--orange">Get a Quote</a>
+    <a href="/hardware" class="btn btn--ghost">View All Hardware</a>
+  </div>
+</section>

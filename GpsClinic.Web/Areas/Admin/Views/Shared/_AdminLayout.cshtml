@@ -1,0 +1,71 @@
+@{
+    var path = Context.Request.Path.Value ?? "";
+    bool Active(string seg) => path.Contains($"/admin/{seg}", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>@(ViewData["Title"] ?? "Dashboard") - GPS Clinic Admin</title>
+  <link rel="icon" type="image/svg+xml" href="~/images/favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+  <link rel="stylesheet" href="~/lib/quill.snow.css" />
+  <script src="~/lib/htmx.min.js"></script>
+</head>
+<body class="admin-body">
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand">GPS <span>Clinic</span> Admin</div>
+    <nav class="admin-nav" hx-target="#admin-main" hx-swap="innerHTML" hx-push-url="true">
+      <a href="/admin" hx-get="/admin" class="@(path == "/admin" || path == "/admin/dashboard" ? "active" : "")">Overview</a>
+      <div class="admin-nav-group-label">Catalog</div>
+      <a href="/admin/hardware" hx-get="/admin/hardware" class="@(Active("hardware") ? "active" : "")">Hardware Products</a>
+      <a href="/admin/solutions" hx-get="/admin/solutions" class="@(Active("solutions") ? "active" : "")">Software Solutions</a>
+      <a href="/admin/industries" hx-get="/admin/industries" class="@(Active("industries") ? "active" : "")">Industries</a>
+      <div class="admin-nav-group-label">Content</div>
+      <a href="/admin/blog" hx-get="/admin/blog" class="@(Active("blog") ? "active" : "")">Blog Posts</a>
+      <a href="/admin/pages" hx-get="/admin/pages" class="@(Active("pages") ? "active" : "")">Pages</a>
+      <a href="/admin/faq" hx-get="/admin/faq" class="@(Active("faq") ? "active" : "")">FAQ</a>
+      <a href="/admin/testimonials" hx-get="/admin/testimonials" class="@(Active("testimonials") ? "active" : "")">Testimonials</a>
+      <a href="/admin/whyus" hx-get="/admin/whyus" class="@(Active("whyus") ? "active" : "")">Why Us Features</a>
+      <div class="admin-nav-group-label">Site</div>
+      <a href="/admin/settings" hx-get="/admin/settings" class="@(Active("settings") ? "active" : "")">Site Settings</a>
+      <a href="/admin/enquiries" hx-get="/admin/enquiries" class="@(Active("enquiries") ? "active" : "")">Enquiries</a>
+    </nav>
+    <div class="admin-sidebar-foot">
+      <a class="admin-view-site" href="/" target="_blank">↗ View live site</a>
+      <form method="post" action="/admin/logout">
+        @Html.AntiForgeryToken()
+        <button type="submit">Log out</button>
+      </form>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-topbar">
+      <h1>GPS Clinic Content Manager</h1>
+    </div>
+    <div id="admin-main" class="admin-content">
+      @RenderBody()
+    </div>
+  </main>
+</div>
+<script src="~/lib/quill.min.js"></script>
+<script>
+  // Initialise any Quill rich-text editors present after a full load or an htmx swap.
+  function initQuillEditors(root) {
+    (root || document).querySelectorAll('.js-richtext:not([data-quill-ready])').forEach(function (el) {
+      el.setAttribute('data-quill-ready', '1');
+      var hiddenInput = document.querySelector('#' + el.dataset.target);
+      var quill = new Quill(el, { theme: 'snow' });
+      quill.root.innerHTML = hiddenInput.value || '';
+      quill.on('text-change', function () { hiddenInput.value = quill.root.innerHTML; });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function () { initQuillEditors(document); });
+  document.body.addEventListener('htmx:afterSwap', function (evt) { initQuillEditors(evt.target); });
+</script>
+</body>
+</html>
