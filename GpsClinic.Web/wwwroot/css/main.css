@@ -1546,3 +1546,44 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .mobile-nav .nav-dropdown.open .nav-dropdown-menu { display: block; }
 .mobile-nav .nav-dropdown-menu a { color: rgba(255,255,255,0.75) !important; padding: 8px 6px; }
+
+/* ── icon-left card layout (Industries page, etc.) — extracted from inline styles so it can go responsive ── */
+.icon-card-row { display: flex; align-items: flex-start; gap: 20px; }
+.icon-card-icon { flex-shrink: 0; width: 52px; height: 52px; }
+.icon-card-body { min-width: 0; }
+.icon-card-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.icon-card-features li { display: flex; align-items: flex-start; gap: 8px; font-size: .84rem; color: var(--text); }
+.icon-card-features li svg { flex-shrink: 0; margin-top: 2px; }
+
+/* ── Mobile refinements ────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .nav-inner { justify-content: space-between; }
+}
+
+@media (max-width: 640px) {
+  /* 1. Hamburger fully to the right */
+  .nav-inner { justify-content: space-between; }
+
+  /* 2. Footer: keep only the essentials on mobile (brand blurb + company/legal links) */
+  .footer-grid { grid-template-columns: 1fr !important; }
+  .footer-col:nth-child(2), .footer-col:nth-child(3) { display: none; }
+
+  /* 3. Cards/grids shrink to fit the screen instead of overflowing */
+  .g-products, .g-3cols, .g-4cols, .g-2cols, .g-industries,
+  .sol-grid, .sol-grid--home, .blog-grid, .brand-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .card, .product-card, .sol-tile, .industry-card, .testimonial-card {
+    max-width: 100%;
+  }
+  .container, .container-narrow { padding: 0 16px; }
+
+  /* 5. Icon-left cards stack: icon on top, content centered */
+  .icon-card-row { flex-direction: column; align-items: center; text-align: center; }
+  .icon-card-icon { margin: 0 auto 4px; }
+  .icon-card-features li { justify-content: center; text-align: left; }
+
+  .benefit-item { flex-direction: column; align-items: center; text-align: center; }
+  .contact-info-item { flex-direction: column; align-items: center; text-align: center; }
+  .support-item { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+}
