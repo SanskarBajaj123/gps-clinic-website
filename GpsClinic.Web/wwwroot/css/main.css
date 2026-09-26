@@ -613,7 +613,7 @@ p { line-height: 1.7; }
 /* ─────────────────────────────────────────────────
    HOME — WHY GPS CLINIC
 ───────────────────────────────────────────────── */
-.section-why { background: var(--bg); padding: 80px 24px; }
+.section-why { background: var(--footer); padding: 80px 24px; }
 .why-benefits { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; }
 .benefit-item { display: flex; gap: 16px; align-items: flex-start; }
 .benefit-icon {
@@ -1655,7 +1655,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
   /* 2. Give "Why Us" its own glorified panel instead of blending into the page */
   .why-panel { padding: 24px 20px; border-radius: 16px; }
-  .benefit-item { text-align: left; } /* keep benefit rows readable, only the heading centers */
+  /* Icon and text both centered - matches every other icon-led card on mobile */
+  .benefit-item { flex-direction: column; align-items: center; text-align: center; }
 }
 
 @media (max-width: 640px) {
