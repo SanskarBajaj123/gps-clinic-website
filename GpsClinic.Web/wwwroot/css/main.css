@@ -1662,3 +1662,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (max-width: 640px) {
   .hero-view-products { display: none; }
 }
+
+/* ── Mobile-only: lighter, easier-on-the-eyes WhatsApp green ────────────── */
+@media (max-width: 640px) {
+  .btn--green { background: #34D399; border-color: #34D399; color: #05281A; }
+  .btn--green:hover, .btn--green:active { background: #2BC589; border-color: #2BC589; }
+  .mobile-sticky-cta a.mobile-sticky-cta-wa { background: #34D399; color: #05281A; }
+}
