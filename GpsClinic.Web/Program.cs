@@ -7,9 +7,10 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // ─── Database ───────────────────────────────────────────────────────────────
-// Dev/prototype: SQLite (file-based, zero setup). Production (BigRock/Plesk):
-// set ConnectionStrings:SqlServer and Database:Provider=SqlServer in config to
-// switch providers without touching application code.
+// Dev/prototype: SQLite (file-based, zero setup). Render: Postgres (persists
+// across restarts/spin-downs, unlike the web service's own ephemeral disk).
+// Production (BigRock/Plesk): set ConnectionStrings:SqlServer and
+// Database:Provider=SqlServer to switch again without touching this code.
 var dbProvider = builder.Configuration["Database:Provider"] ?? "Sqlite";
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -17,12 +18,36 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     {
         options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
     }
+    else if (dbProvider.Equals("Postgres", StringComparison.OrdinalIgnoreCase))
+    {
+        var databaseUrl = builder.Configuration["DATABASE_URL"]
+            ?? throw new InvalidOperationException("Database:Provider is Postgres but DATABASE_URL is not set.");
+        options.UseNpgsql(BuildNpgsqlConnectionString(databaseUrl));
+    }
     else
     {
         var sqlitePath = builder.Configuration.GetConnectionString("Sqlite") ?? "Data Source=gpsclinic.db";
         options.UseSqlite(sqlitePath);
     }
 });
+
+// Render's DATABASE_URL is a "postgresql://user:pass@host/db" URI; Npgsql wants
+// a keyword connection string, so convert it once here.
+static string BuildNpgsqlConnectionString(string databaseUrl)
+{
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var csb = new Npgsql.NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.IsDefaultPort ? 5432 : uri.Port,
+        Username = Uri.UnescapeDataString(userInfo[0]),
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+        Database = uri.AbsolutePath.TrimStart('/'),
+        SslMode = Npgsql.SslMode.Prefer,
+    };
+    return csb.ConnectionString;
+}
 
 // ─── Identity (admin login) ─────────────────────────────────────────────────
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
