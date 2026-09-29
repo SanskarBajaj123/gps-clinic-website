@@ -32,6 +32,14 @@ public static class SiteSettingKeys
     public const string LoginFleetTrackingUrl = "login.fleet_tracking_url";
     public const string LoginFuelSystemUrl = "login.fuel_system_url";
     public const string LoginRtoChallanUrl = "login.rto_challan_url";
+    public const string LoginTrackbeeSchoolUrl = "login.trackbee_school_url";
+
+    public const string SocialFacebookUrl = "social.facebook_url";
+    public const string SocialInstagramUrl = "social.instagram_url";
+    public const string SocialGoogleUrl = "social.google_url";
+    public const string SocialLinkedInUrl = "social.linkedin_url";
+    public const string SocialXUrl = "social.x_url";
+    public const string SocialIndiaMartUrl = "social.indiamart_url";
 
     public static readonly (string Key, string Label, string Default)[] All =
     {
@@ -49,7 +57,14 @@ public static class SiteSettingKeys
         (ContactEmail, "Contact Email", "info@gpsclinic.co.in"),
         (ContactAddress, "Contact Address", "Shop No. 110, Kailash Market, Padampura Circle, Railway Station Road, Chhatrapati Sambhajinagar, Maharashtra 431005"),
         (LoginFleetTrackingUrl, "Login Menu: Fleet Tracking Portal URL", "https://fleettracking.gpsclinic.co.in"),
-        (LoginFuelSystemUrl, "Login Menu: Fuel System Portal URL", "http://gpsclinic.asymbix.net/"),
-        (LoginRtoChallanUrl, "Login Menu: RTO Challan Portal URL", "https://challan.nigraani.com/"),
+        (LoginFuelSystemUrl, "Login Menu: Fuel Tracking Portal URL", "http://gpsclinic.asymbix.net/"),
+        (LoginRtoChallanUrl, "Login Menu: RTO Challan Nigraani Portal URL", "https://challan.nigraani.com/"),
+        (LoginTrackbeeSchoolUrl, "Login Menu: Trackbee School Portal URL", "https://trackbeeschool.gpsclinic.co.in"),
+        (SocialFacebookUrl, "Social: Facebook URL", "https://www.facebook.com/gpsclinicIndia/"),
+        (SocialInstagramUrl, "Social: Instagram URL", "https://www.instagram.com/gpsclinic_official/"),
+        (SocialGoogleUrl, "Social: Google Business URL", "https://share.google/1MOJKwqwGvPF3GFVG"),
+        (SocialLinkedInUrl, "Social: LinkedIn URL", "https://linkedin.com/company/gpsclinic"),
+        (SocialXUrl, "Social: X (Twitter) URL", "https://x.com/gpsclinicindia"),
+        (SocialIndiaMartUrl, "Social: IndiaMART URL", "https://www.indiamart.com/gps-clinic-aurangabad/"),
     };
 }

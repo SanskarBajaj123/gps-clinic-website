@@ -16,7 +16,7 @@
   </div>
   <div class="a-form-row"><label>Excerpt</label><textarea name="Excerpt" rows="2">@Model.Excerpt</textarea></div>
 
-  @{ ViewData["FieldName"] = "FeaturedImagePath"; ViewData["FieldLabel"] = "Featured Image"; ViewData["Folder"] = "blog"; }
+  @{ ViewData["FieldName"] = "FeaturedImagePath"; ViewData["FieldLabel"] = "Featured Image"; ViewData["Folder"] = "blog"; ViewData["AspectRatio"] = "16/9"; ViewData["RecommendedSize"] = "widescreen 16:9, e.g. 1200×675px, JPG or PNG"; }
   @await Html.PartialAsync("_ImageUploadField", Model.FeaturedImagePath)
 
   <div class="a-form-row">

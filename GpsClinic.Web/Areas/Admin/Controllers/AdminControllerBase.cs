@@ -12,12 +12,13 @@ public abstract class AdminControllerBase : Controller
     protected bool IsHtmx => Request.Headers.ContainsKey("HX-Request");
 
     /// <summary>
-    /// htmx swap -> just the partial. Direct navigation/refresh -> "Index.cshtml" (which itself
-    /// renders the same partial inside the admin shell), so every screen works both ways.
+    /// htmx swap -> just the partial (no layout). Direct navigation/refresh -> the same partial
+    /// rendered as a full View, which picks up _ViewStart's _AdminLayout automatically, so every
+    /// screen works both ways.
     /// </summary>
     protected IActionResult RenderPartialOrPage(string partialName, object? model)
     {
         if (IsHtmx) return PartialView(partialName, model);
-        return View("Index", model);
+        return View(partialName, model);
     }
 }

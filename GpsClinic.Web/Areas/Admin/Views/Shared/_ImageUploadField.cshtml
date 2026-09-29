@@ -3,6 +3,8 @@
     var fieldName = ViewData["FieldName"] as string ?? "ImagePath";
     var label = ViewData["FieldLabel"] as string ?? "Image";
     var folder = ViewData["Folder"] as string ?? "general";
+    var recommendedSize = ViewData["RecommendedSize"] as string ?? "JPG or PNG, under 1MB";
+    var aspectRatioJs = ViewData["AspectRatio"] as string ?? "NaN";
     var inputId = $"img-{fieldName}-{Guid.NewGuid():N}".Substring(0, 24);
 }
 <div class="a-form-row">
@@ -12,35 +14,110 @@
     <div>
       <input type="hidden" name="@fieldName" id="@inputId-value" value="@Model" />
       <input type="file" accept="image/*" id="@inputId-file">
-      <p class="a-hint">Uploads immediately and fills the field below.</p>
+      <p class="a-hint">Recommended: @recommendedSize. You'll be able to crop it to fit before it uploads.</p>
     </div>
   </div>
 </div>
+
+<div class="a-crop-modal" id="@inputId-modal">
+  <div class="a-crop-modal-inner">
+    <div class="a-crop-modal-head">
+      <span>Crop image — @label</span>
+      <button type="button" class="a-crop-close" id="@inputId-cancel" aria-label="Cancel">&times;</button>
+    </div>
+    <div class="a-crop-modal-body">
+      <img id="@inputId-cropimg" src="" alt="">
+    </div>
+    <div class="a-crop-modal-foot">
+      <span class="a-hint" style="margin:0;">@recommendedSize</span>
+      <div style="display:flex;gap:10px;">
+        <button type="button" class="a-btn a-btn--ghost" id="@inputId-cancel2">Cancel</button>
+        <button type="button" class="a-btn a-btn--primary" id="@inputId-confirm">Crop &amp; Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   var fileInput = document.getElementById('@inputId-file');
   var valueInput = document.getElementById('@inputId-value');
   var preview = document.getElementById('@inputId-preview');
+  var modal = document.getElementById('@inputId-modal');
+  var cropImg = document.getElementById('@inputId-cropimg');
+  var confirmBtn = document.getElementById('@inputId-confirm');
+  var cancelBtn = document.getElementById('@inputId-cancel');
+  var cancelBtn2 = document.getElementById('@inputId-cancel2');
   if (!fileInput) return;
-  fileInput.addEventListener('change', function () {
-    var file = fileInput.files[0];
-    if (!file) return;
+
+  var cropper = null;
+  var currentFile = null;
+
+  function closeModal() {
+    modal.classList.remove('open');
+    if (cropper) { cropper.destroy(); cropper = null; }
+    fileInput.value = '';
+  }
+
+  function upload(blob, filename) {
     var fd = new FormData();
-    fd.append('file', file);
+    fd.append('file', blob, filename);
     fd.append('folder', '@folder');
     var token = document.querySelector('input[name="__RequestVerificationToken"]');
     if (token) fd.append('__RequestVerificationToken', token.value);
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Uploading…';
     fetch('/admin/media/upload', { method: 'POST', body: fd })
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Crop & Upload';
         if (data.success) {
           valueInput.value = data.url;
           preview.src = data.url;
           preview.style.display = '';
+          closeModal();
         } else {
           alert(data.message || 'Upload failed.');
         }
+      })
+      .catch(function () {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Crop & Upload';
+        alert('Upload failed.');
       });
+  }
+
+  fileInput.addEventListener('change', function () {
+    var file = fileInput.files[0];
+    if (!file) return;
+    currentFile = file;
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      cropImg.src = e.target.result;
+      modal.classList.add('open');
+      if (cropper) cropper.destroy();
+      cropper = new Cropper(cropImg, {
+        aspectRatio: @aspectRatioJs,
+        viewMode: 1,
+        autoCropArea: 1,
+        background: false,
+        responsive: true,
+      });
+    };
+    reader.readAsDataURL(file);
   });
+
+  confirmBtn.addEventListener('click', function () {
+    if (!cropper || !currentFile) return;
+    cropper.getCroppedCanvas({ imageSmoothingQuality: 'high' }).toBlob(function (blob) {
+      if (!blob) return;
+      var name = currentFile.name.replace(/\.[^.]+$/, '') + '.jpg';
+      upload(blob, name);
+    }, 'image/jpeg', 0.92);
+  });
+
+  cancelBtn.addEventListener('click', closeModal);
+  cancelBtn2.addEventListener('click', closeModal);
 })();
 </script>

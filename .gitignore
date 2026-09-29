@@ -6,3 +6,5 @@ obj/
 .vs/
 *.user
 appsettings.Development.json.bak
+wwwroot/uploads/
+.claude/

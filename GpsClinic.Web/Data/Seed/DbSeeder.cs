@@ -11,9 +11,12 @@ public static class DbSeeder
 
         await SeedAdminAsync(userManager, roleManager);
 
-        if (!db.SiteSettings.Any())
+        // Insert any settings keys that don't exist yet (covers both a fresh DB and
+        // keys added to SiteSettingKeys.All after the DB was already seeded once).
+        var existingKeys = db.SiteSettings.Select(s => s.Key).ToHashSet();
+        foreach (var (key, _, def) in SiteSettingKeys.All)
         {
-            foreach (var (key, _, def) in SiteSettingKeys.All)
+            if (!existingKeys.Contains(key))
                 db.SiteSettings.Add(new SiteSetting { Key = key, Value = def });
         }
 

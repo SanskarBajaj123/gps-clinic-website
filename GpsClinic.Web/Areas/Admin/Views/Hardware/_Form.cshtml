@@ -48,10 +48,10 @@
     <input type="text" name="BandItems" value="@Model.BandItems" placeholder="1-2 Hour Installation, No SIM Required, AIS 140 Compliant">
   </div>
 
-  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (used in product grids)"; ViewData["Folder"] = "hardware"; }
+  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (used in product grids)"; ViewData["Folder"] = "hardware"; ViewData["AspectRatio"] = "4/3"; ViewData["RecommendedSize"] = "landscape 4:3, e.g. 1200×900px, JPG or PNG"; }
   @await Html.PartialAsync("_ImageUploadField", Model.CardImagePath)
 
-  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (used on the product detail page)"; ViewData["Folder"] = "hardware"; }
+  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (used on the product detail page)"; ViewData["Folder"] = "hardware"; ViewData["AspectRatio"] = "1/1"; ViewData["RecommendedSize"] = "square 1:1, e.g. 1200×1200px (1600×1600px also works), JPG or PNG"; }
   @await Html.PartialAsync("_ImageUploadField", Model.HeroImagePath)
 
   <div class="a-form-row">

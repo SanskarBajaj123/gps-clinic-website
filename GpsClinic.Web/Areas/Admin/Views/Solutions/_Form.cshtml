@@ -33,10 +33,10 @@
     </select>
   </div>
 
-  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (optional, overrides gradient tile)"; ViewData["Folder"] = "solutions"; }
+  @{ ViewData["FieldName"] = "CardImagePath"; ViewData["FieldLabel"] = "Card Image (optional, overrides gradient tile)"; ViewData["Folder"] = "solutions"; ViewData["AspectRatio"] = "3/2"; ViewData["RecommendedSize"] = "landscape 3:2, e.g. 1200×800px, JPG or PNG"; }
   @await Html.PartialAsync("_ImageUploadField", Model.CardImagePath)
 
-  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (optional, solution detail page)"; ViewData["Folder"] = "solutions"; }
+  @{ ViewData["FieldName"] = "HeroImagePath"; ViewData["FieldLabel"] = "Hero Image (optional, solution detail page)"; ViewData["Folder"] = "solutions"; ViewData["AspectRatio"] = "16/9"; ViewData["RecommendedSize"] = "widescreen 16:9, e.g. 1600×900px, JPG or PNG"; }
   @await Html.PartialAsync("_ImageUploadField", Model.HeroImagePath)
 
   <div class="a-form-row">
