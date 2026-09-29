@@ -65,7 +65,19 @@
     (root || document).querySelectorAll('.js-richtext:not([data-quill-ready])').forEach(function (el) {
       el.setAttribute('data-quill-ready', '1');
       var hiddenInput = document.querySelector('#' + el.dataset.target);
-      var quill = new Quill(el, { theme: 'snow' });
+      var quill = new Quill(el, {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ header: [false, 2, 3] }],
+            ['bold', 'italic', 'underline'],
+            [{ align: [] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            ['link'],
+            ['clean']
+          ]
+        }
+      });
       quill.root.innerHTML = hiddenInput.value || '';
       quill.on('text-change', function () { hiddenInput.value = quill.root.innerHTML; });
     });
