@@ -1,12 +1,17 @@
 @model List<HardwareProduct>
-@{ ViewData["Title"] = "GPS Tracking Hardware"; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = "GPS Tracking Hardware";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+}
 
 <section class="page-hero">
   <div class="container page-hero-inner">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Hardware Products</span></nav>
-    <span class="section-label section-label--orange" style="font-size:11px;letter-spacing:0.1em;">Hardware</span>
-    <h1>GPS Tracking <span>Hardware</span></h1>
-    <p>AIS 140 certified devices for every vehicle type. Wired, OBD, solar, and 4G - all with same-day installation across Maharashtra.</p>
+    <span class="section-label section-label--orange" style="font-size:11px;letter-spacing:0.1em;">@S(SiteSettingKeys.PageHardwareEyebrow, "Hardware")</span>
+    <h1>@S(SiteSettingKeys.PageHardwareHeading, "GPS Tracking Hardware")</h1>
+    <p>@S(SiteSettingKeys.PageHardwareIntro, "AIS 140 certified devices for every vehicle type. Wired, OBD, solar, and 4G - all with same-day installation across Maharashtra.")</p>
   </div>
 </section>
 
@@ -47,9 +52,9 @@
     }
     else
     {
-      <p style="text-align:center;padding:60px 0;color:var(--muted);">Hardware products coming soon. <a href="/contact">Contact us</a> to enquire.</p>
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">@S(SiteSettingKeys.PageHardwareEmpty, "Hardware products coming soon.") <a href="/contact">Contact us</a> to enquire.</p>
     }
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Not Sure Which Device You Need?", "Tell us your vehicle type and use case - we will recommend the right hardware and install it for you.", "Get a Recommendation"))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaHardwareListTitle, "Not Sure Which Device You Need?"), S(SiteSettingKeys.CtaHardwareListSubtitle, "Tell us your vehicle type and use case - we will recommend the right hardware and install it for you."), S(SiteSettingKeys.CtaHardwareListButton, "Get a Recommendation")))

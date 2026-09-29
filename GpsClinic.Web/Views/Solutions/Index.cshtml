@@ -1,12 +1,17 @@
 @model List<SolutionProduct>
-@{ ViewData["Title"] = "GPS Tracking Software Solutions"; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = "GPS Tracking Software Solutions";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+}
 
 <section class="page-hero">
   <div class="container page-hero-inner">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Software Solutions</span></nav>
-    <span class="section-label section-label--teal" style="font-size:11px;letter-spacing:0.1em;">Software</span>
-    <h1>GPS Tracking <span>Solutions</span></h1>
-    <p>Purpose-built platforms for schools, logistics, healthcare, government, and 17+ industries. Powered by GPS Clinic.</p>
+    <span class="section-label section-label--teal" style="font-size:11px;letter-spacing:0.1em;">@S(SiteSettingKeys.PageSolutionsEyebrow, "Software")</span>
+    <h1>@S(SiteSettingKeys.PageSolutionsHeading, "GPS Tracking Solutions")</h1>
+    <p>@S(SiteSettingKeys.PageSolutionsIntro, "Purpose-built platforms for schools, logistics, healthcare, government, and 17+ industries. Powered by GPS Clinic.")</p>
   </div>
 </section>
 
@@ -39,9 +44,9 @@
     }
     else
     {
-      <p style="text-align:center;padding:60px 0;color:var(--muted);">Solutions coming soon. <a href="/contact">Contact us</a> to enquire.</p>
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">@S(SiteSettingKeys.PageSolutionsEmpty, "Solutions coming soon.") <a href="/contact">Contact us</a> to enquire.</p>
     }
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Need a Custom Solution?", "We integrate and configure GPS software for your specific workflow. Let us build the right solution for your fleet.", "Discuss Your Needs"))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaSolutionsListTitle, "Need a Custom Solution?"), S(SiteSettingKeys.CtaSolutionsListSubtitle, "We integrate and configure GPS software for your specific workflow. Let us build the right solution for your fleet."), S(SiteSettingKeys.CtaSolutionsListButton, "Discuss Your Needs")))

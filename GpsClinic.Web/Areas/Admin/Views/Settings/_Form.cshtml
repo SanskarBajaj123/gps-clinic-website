@@ -6,20 +6,26 @@
   <div class="a-alert a-alert--success">Settings saved.</div>
 }
 
-<form class="a-card" hx-post="/admin/settings" hx-target="#admin-main">
+<form hx-post="/admin/settings" hx-target="#admin-main">
   @Html.AntiForgeryToken()
-  @foreach (var (key, label, def) in SiteSettingKeys.All)
+  @foreach (var group in SiteSettingKeys.All.GroupBy(s => s.Category))
   {
-    var value = Model.TryGetValue(key, out var v) ? v : def;
-    <div class="a-form-row">
-      <label>@label</label>
-      @if (label.Contains("Subheadline") || label.Contains("Address"))
+    <div class="a-card">
+      <h3 style="margin:0 0 16px;font-family:'Outfit',sans-serif;font-size:15px;">@group.Key</h3>
+      @foreach (var (key, category, label, def, multiline) in group)
       {
-        <textarea name="@key" rows="2">@value</textarea>
-      }
-      else
-      {
-        <input type="text" name="@key" value="@value">
+        var value = Model.TryGetValue(key, out var v) ? v : def;
+        <div class="a-form-row">
+          <label>@label</label>
+          @if (multiline)
+          {
+            <textarea name="@key" rows="2">@value</textarea>
+          }
+          else
+          {
+            <input type="text" name="@key" value="@value">
+          }
+        </div>
       }
     </div>
   }

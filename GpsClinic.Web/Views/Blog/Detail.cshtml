@@ -1,5 +1,10 @@
 @model BlogPost
-@{ ViewData["Title"] = Model.Title; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = Model.Title;
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+}
 
 <section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
   <div class="container">
@@ -19,4 +24,4 @@
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Ready to Track Your Fleet?", "Get a free demo, site visit, or same-day quote from our local team.", (string?)null))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaBlogTitle, "Ready to Track Your Fleet?"), S(SiteSettingKeys.CtaBlogSubtitle, "Get a free demo, site visit, or same-day quote from our local team."), (string?)null))

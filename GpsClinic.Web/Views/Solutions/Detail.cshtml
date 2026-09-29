@@ -2,7 +2,9 @@
 @inject GpsClinic.Web.Data.ApplicationDbContext Db
 @{
     ViewData["Title"] = Model.Title;
-    var whatsapp = (await Db.SiteSettings.FindAsync(SiteSettingKeys.ContactWhatsApp))?.Value ?? "919260202020";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+    var whatsapp = S(SiteSettingKeys.ContactWhatsApp, "919260202020");
     var tags = (Model.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
 }
 
@@ -30,11 +32,11 @@
       <div style="flex:1;" class="post-content">
         @Html.Raw(Model.ContentHtml)
         <div class="gps-disclaimer" style="margin-top:32px;">
-          <p><strong>GPS Accuracy Notice:</strong> GPS tracking accuracy depends on satellite signal availability and environmental conditions. Typical accuracy is 5–10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.</p>
+          <p><strong>GPS Accuracy Notice:</strong> @S(SiteSettingKeys.SolDetailDisclaimer, "GPS tracking accuracy is dependent on satellite signal availability, environmental factors (tall buildings, tunnels, dense vegetation), and device firmware. Typical accuracy is 5-10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.")</p>
         </div>
       </div>
       <div style="flex:0 0 300px;">
-        @{ ViewData["FormHeading"] = "Get a Demo"; ViewData["FormSub"] = "We'll set up a live demo for your team."; ViewData["SubmitLabel"] = "Request Demo"; }
+        @{ ViewData["FormHeading"] = S(SiteSettingKeys.SolDetailFormHeading, "Get a Demo"); ViewData["FormSub"] = S(SiteSettingKeys.SolDetailFormSub, "We'll set up a live demo for your team."); ViewData["SubmitLabel"] = S(SiteSettingKeys.SolDetailFormSubmit, "Request Demo"); }
         @await Html.PartialAsync("_EnquiryForm", Model.Title + " (Solution)")
       </div>
     </div>
@@ -42,11 +44,11 @@
 </section>
 
 <section class="hw-cta-band">
-  <h2>Interested in @Model.Title?</h2>
-  <p>Let's set up a live demo. No commitment required.</p>
+  <h2>@string.Format(S(SiteSettingKeys.SolDetailCtaTitleTemplate, "Interested in {0}?"), Model.Title)</h2>
+  <p>@S(SiteSettingKeys.SolDetailCtaSubtitle, "Let's set up a live demo. No commitment required.")</p>
   <div class="btn-row">
-    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">WhatsApp Us</a>
-    <a href="/contact" class="btn btn--orange">Contact Us</a>
-    <a href="/solutions" class="btn btn--ghost">All Solutions</a>
+    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">@S(SiteSettingKeys.SolDetailCtaWhatsApp, "WhatsApp Us")</a>
+    <a href="/contact" class="btn btn--orange">@S(SiteSettingKeys.SolDetailCtaContact, "Contact Us")</a>
+    <a href="/solutions" class="btn btn--ghost">@S(SiteSettingKeys.SolDetailCtaAllSolutions, "All Solutions")</a>
   </div>
 </section>

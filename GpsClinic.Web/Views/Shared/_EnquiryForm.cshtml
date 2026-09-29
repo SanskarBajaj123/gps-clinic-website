@@ -1,8 +1,11 @@
 @model string
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
 @{
-    var heading = ViewData["FormHeading"] as string ?? "Get a Free Quote";
-    var sub = ViewData["FormSub"] as string ?? "Fill in your details and we'll call you back within 24 hours.";
-    var submitLabel = ViewData["SubmitLabel"] as string ?? "Send Enquiry";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+    var heading = ViewData["FormHeading"] as string ?? S(SiteSettingKeys.EnquiryDefaultHeading, "Get a Free Quote");
+    var sub = ViewData["FormSub"] as string ?? S(SiteSettingKeys.EnquiryDefaultSub, "Fill in your details and we'll call you back within 24 hours.");
+    var submitLabel = ViewData["SubmitLabel"] as string ?? S(SiteSettingKeys.EnquiryDefaultSubmit, "Send Enquiry");
 }
 <div class="enquiry-form-card">
   <h3>@heading</h3>
@@ -50,7 +53,7 @@
     </div>
     <div class="form-consent">
       <input type="checkbox" id="consent-@Guid.NewGuid().ToString("N").Substring(0,6)" name="consent" required>
-      <label>I consent to GPS Clinic contacting me via phone or WhatsApp regarding my enquiry. My details will not be shared with third parties.</label>
+      <label>@S(SiteSettingKeys.EnquiryConsentText, "I consent to GPS Clinic contacting me via phone or WhatsApp regarding my enquiry. My details will not be shared with third parties.")</label>
     </div>
     <div class="form-success"></div>
     <button type="submit" class="btn btn--orange js-submit-btn" style="width:100%;justify-content:center;">@submitLabel</button>

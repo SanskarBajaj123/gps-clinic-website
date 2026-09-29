@@ -1,11 +1,16 @@
 @model List<BlogPost>
-@{ ViewData["Title"] = "Blog"; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = "Blog";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+}
 
 <section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>Blog</span></nav>
-    <h1 style="color:var(--white);margin-top:16px;">GPS Clinic <span style="color:var(--orange);">Blog</span></h1>
-    <p style="color:var(--muted);font-size:1.1rem;max-width:540px;margin-top:12px;">News, guides, and updates on GPS tracking, fleet management, and AIS 140 compliance.</p>
+    <h1 style="color:var(--white);margin-top:16px;">@S(SiteSettingKeys.PageBlogHeading, "GPS Clinic Blog")</h1>
+    <p style="color:var(--muted);font-size:1.1rem;max-width:540px;margin-top:12px;">@S(SiteSettingKeys.PageBlogIntro, "News, guides, and updates on GPS tracking, fleet management, and AIS 140 compliance.")</p>
   </div>
 </section>
 
@@ -32,9 +37,9 @@
     }
     else
     {
-      <p style="text-align:center;padding:60px 0;color:var(--muted);">No blog posts yet - check back soon.</p>
+      <p style="text-align:center;padding:60px 0;color:var(--muted);">@S(SiteSettingKeys.PageBlogEmpty, "No blog posts yet - check back soon.")</p>
     }
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Ready to Track Your Fleet?", "Get a free demo, site visit, or same-day quote from our local team.", (string?)null))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaBlogTitle, "Ready to Track Your Fleet?"), S(SiteSettingKeys.CtaBlogSubtitle, "Get a free demo, site visit, or same-day quote from our local team."), (string?)null))

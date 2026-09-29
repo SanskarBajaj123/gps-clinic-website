@@ -28,13 +28,13 @@
     </a>
 
     <nav class="nav-links" role="navigation" aria-label="Primary">
-      <a href="/">Home</a>
-      <a href="/about-us">About</a>
-      <a href="/hardware">Hardware</a>
-      <a href="/solutions">Solutions</a>
-      <a href="/industries">Industries</a>
-      <a href="/blog">Blog</a>
-      <a href="/contact">Contact</a>
+      <a href="/">@S(SiteSettingKeys.NavHome, "Home")</a>
+      <a href="/about-us">@S(SiteSettingKeys.NavAbout, "About")</a>
+      <a href="/hardware">@S(SiteSettingKeys.NavHardware, "Hardware")</a>
+      <a href="/solutions">@S(SiteSettingKeys.NavSolutions, "Solutions")</a>
+      <a href="/industries">@S(SiteSettingKeys.NavIndustries, "Industries")</a>
+      <a href="/blog">@S(SiteSettingKeys.NavBlog, "Blog")</a>
+      <a href="/contact">@S(SiteSettingKeys.NavContact, "Contact")</a>
       <div class="nav-dropdown" id="login-dropdown">
         <a href="#" role="button" aria-haspopup="true" aria-expanded="false">
           Login
@@ -43,19 +43,19 @@
         <div class="nav-dropdown-menu">
           <a href="@S(SiteSettingKeys.LoginFleetTrackingUrl)" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-            Fleet Tracking
+            @S(SiteSettingKeys.LoginFleetTrackingLabel, "Fleet Tracking")
           </a>
           <a href="@S(SiteSettingKeys.LoginFuelSystemUrl)" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-            Fuel Tracking
+            @S(SiteSettingKeys.LoginFuelSystemLabel, "Fuel Tracking")
           </a>
           <a href="@S(SiteSettingKeys.LoginRtoChallanUrl)" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            RTO Challan Nigraani
+            @S(SiteSettingKeys.LoginRtoChallanLabel, "RTO Challan Nigraani")
           </a>
           <a href="@S(SiteSettingKeys.LoginTrackbeeSchoolUrl)" target="_blank" rel="noopener">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 14l9-5-9-5-9 5 9 5z"/><path d="M12 14l6.16-3.42A12.02 12.02 0 0112 21a12.02 12.02 0 01-6.16-10.42L12 14z"/></svg>
-            Trackbee School
+            @S(SiteSettingKeys.LoginTrackbeeSchoolLabel, "Trackbee School")
           </a>
         </div>
       </div>
@@ -66,7 +66,7 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.476 2 2 6.478 2 12.002c0 1.97.56 3.807 1.533 5.367L2 22l4.784-1.525A9.942 9.942 0 0011.998 22c5.523 0 9.999-4.477 9.999-10.002C21.997 6.476 17.521 2 11.998 2z"/></svg>
         WhatsApp
       </a>
-      <a href="/contact" class="btn btn--orange btn--sm">Get a Quote</a>
+      <a href="/contact" class="btn btn--orange btn--sm">@S(SiteSettingKeys.NavQuoteButton, "Get a Quote")</a>
     </div>
 
     <button class="nav-burger" id="nav-burger" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,23 +77,23 @@
   </div>
 
   <nav class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile">
-    <a href="/">Home</a>
-    <a href="/about-us">About</a>
-    <a href="/hardware">Hardware</a>
-    <a href="/solutions">Solutions</a>
-    <a href="/industries">Industries</a>
-    <a href="/blog">Blog</a>
-    <a href="/contact">Contact</a>
+    <a href="/">@S(SiteSettingKeys.NavHome, "Home")</a>
+    <a href="/about-us">@S(SiteSettingKeys.NavAbout, "About")</a>
+    <a href="/hardware">@S(SiteSettingKeys.NavHardware, "Hardware")</a>
+    <a href="/solutions">@S(SiteSettingKeys.NavSolutions, "Solutions")</a>
+    <a href="/industries">@S(SiteSettingKeys.NavIndustries, "Industries")</a>
+    <a href="/blog">@S(SiteSettingKeys.NavBlog, "Blog")</a>
+    <a href="/contact">@S(SiteSettingKeys.NavContact, "Contact")</a>
     <div class="nav-dropdown" id="login-dropdown-mobile">
       <a href="#" role="button" aria-haspopup="true" aria-expanded="false">
         Login
         <svg class="nav-dropdown-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
       </a>
       <div class="nav-dropdown-menu">
-        <a href="@S(SiteSettingKeys.LoginFleetTrackingUrl)" target="_blank" rel="noopener">Fleet Tracking</a>
-        <a href="@S(SiteSettingKeys.LoginFuelSystemUrl)" target="_blank" rel="noopener">Fuel Tracking</a>
-        <a href="@S(SiteSettingKeys.LoginRtoChallanUrl)" target="_blank" rel="noopener">RTO Challan Nigraani</a>
-        <a href="@S(SiteSettingKeys.LoginTrackbeeSchoolUrl)" target="_blank" rel="noopener">Trackbee School</a>
+        <a href="@S(SiteSettingKeys.LoginFleetTrackingUrl)" target="_blank" rel="noopener">@S(SiteSettingKeys.LoginFleetTrackingLabel, "Fleet Tracking")</a>
+        <a href="@S(SiteSettingKeys.LoginFuelSystemUrl)" target="_blank" rel="noopener">@S(SiteSettingKeys.LoginFuelSystemLabel, "Fuel Tracking")</a>
+        <a href="@S(SiteSettingKeys.LoginRtoChallanUrl)" target="_blank" rel="noopener">@S(SiteSettingKeys.LoginRtoChallanLabel, "RTO Challan Nigraani")</a>
+        <a href="@S(SiteSettingKeys.LoginTrackbeeSchoolUrl)" target="_blank" rel="noopener">@S(SiteSettingKeys.LoginTrackbeeSchoolLabel, "Trackbee School")</a>
       </div>
     </div>
   </nav>
@@ -112,7 +112,7 @@
             </div>
           </a>
         </div>
-        <p class="footer-desc">India's trusted GPS tracking partner. AIS 140 compliant hardware, custom software, and 24/7 support from Chhatrapati Sambhajinagar.</p>
+        <p class="footer-desc">@S(SiteSettingKeys.FooterDescription, "India's trusted GPS tracking partner. AIS 140 compliant hardware, custom software, and 24/7 support from Chhatrapati Sambhajinagar.")</p>
         <div class="footer-social">
           <a href="https://wa.me/@whatsapp" aria-label="WhatsApp" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.476 2 2 6.478 2 12.002c0 1.97.56 3.807 1.533 5.367L2 22l4.784-1.525A9.942 9.942 0 0011.998 22c5.523 0 9.999-4.477 9.999-10.002C21.997 6.476 17.521 2 11.998 2z"/></svg>
@@ -163,21 +163,21 @@
       </div>
 
       <div class="footer-col">
-        <h4>Hardware Products</h4>
+        <h4>@S(SiteSettingKeys.FooterHardwareHeading, "Hardware Products")</h4>
         <ul>
           <li><a href="/hardware">All Hardware →</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Software Solutions</h4>
+        <h4>@S(SiteSettingKeys.FooterSolutionsHeading, "Software Solutions")</h4>
         <ul>
           <li><a href="/solutions">All Solutions →</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h4>Company</h4>
+        <h4>@S(SiteSettingKeys.FooterCompanyHeading, "Company")</h4>
         <ul>
           <li><a href="/about-us">About Us</a></li>
           <li><a href="/industries">Industries</a></li>
@@ -197,7 +197,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; @DateTime.Now.Year GPS Clinic. All rights reserved.</p>
+      <p>&copy; @DateTime.Now.Year @S(SiteSettingKeys.FooterCopyright, "GPS Clinic. All rights reserved.")</p>
       <p><a href="/privacy-policy">Privacy Policy</a> &nbsp;·&nbsp; <a href="/terms-conditions">Terms &amp; Conditions</a></p>
     </div>
   </div>

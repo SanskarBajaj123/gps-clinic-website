@@ -1,5 +1,11 @@
 @model Page
-@{ ViewData["Title"] = Model.Title; ViewData["Description"] = Model.MetaDescription; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.MetaDescription;
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+}
 
 <section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
   <div class="container">
@@ -20,8 +26,8 @@
 
       <div style="margin-top:56px;">
         <div style="text-align:center;margin-bottom:32px;">
-          <span class="section-eyebrow">Hardware Partners</span>
-          <h2>Trusted Brands We Supply</h2>
+          <span class="section-eyebrow">@S(SiteSettingKeys.AboutBrandsEyebrow, "Hardware Partners")</span>
+          <h2>@S(SiteSettingKeys.AboutBrandsHeading, "Trusted Brands We Supply")</h2>
         </div>
         <div class="brand-grid">
           @foreach (var (name, file) in new[] { ("Concox","concox.svg"), ("Queclink","queclink.svg"), ("Teltonika","teltonika.svg"), ("Coban","coban.svg"), ("Jimi IoT","jimi-iot.svg"), ("Suntech","suntech.svg") })
@@ -29,7 +35,7 @@
             <div class="brand-card"><img src="/images/brands/@file" alt="@name logo" width="140" height="48" loading="lazy"></div>
           }
         </div>
-        <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:24px;">Brand names are used for identification only. GPS Clinic is an independent reseller and integrator.</p>
+        <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-top:24px;">@S(SiteSettingKeys.AboutBrandsDisclaimer, "Brand names are used for identification only. GPS Clinic is an independent reseller and integrator.")</p>
       </div>
     }
     else
@@ -39,4 +45,4 @@
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Ready to Get Started?", "Get a free site visit, device demo, or same-day quotation from our local team.", (string?)null))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaPagesTitle, "Ready to Get Started?"), S(SiteSettingKeys.CtaPagesSubtitle, "Get a free site visit, device demo, or same-day quotation from our local team."), (string?)null))

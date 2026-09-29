@@ -23,7 +23,7 @@ public class SettingsController : AdminControllerBase
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Save()
     {
-        foreach (var (key, _, _) in SiteSettingKeys.All)
+        foreach (var (key, _, _, _, _) in SiteSettingKeys.All)
         {
             if (!Request.Form.TryGetValue(key, out var value)) continue;
             var row = await _db.SiteSettings.FindAsync(key);

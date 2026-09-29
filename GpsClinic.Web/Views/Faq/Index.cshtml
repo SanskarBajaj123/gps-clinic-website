@@ -1,11 +1,17 @@
 @model List<FaqCategory>
-@{ ViewData["Title"] = "Frequently Asked Questions"; }
+@inject GpsClinic.Web.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = "Frequently Asked Questions";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+    var whatsapp = S(SiteSettingKeys.ContactWhatsApp, "919260202020");
+}
 
 <section class="page-hero" style="background:var(--navy);padding:80px 0 60px;">
   <div class="container">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><span>FAQ</span></nav>
-    <h1 style="color:var(--white);margin-top:16px;">Frequently Asked <span style="color:var(--orange);">Questions</span></h1>
-    <p style="color:var(--muted);font-size:1.1rem;max-width:540px;margin-top:12px;">Everything you need to know about GPS tracking hardware, software, installation, and pricing.</p>
+    <h1 style="color:var(--white);margin-top:16px;">@S(SiteSettingKeys.PageFaqHeading, "Frequently Asked Questions")</h1>
+    <p style="color:var(--muted);font-size:1.1rem;max-width:540px;margin-top:12px;">@S(SiteSettingKeys.PageFaqIntro, "Everything you need to know about GPS tracking hardware, software, installation, and pricing.")</p>
   </div>
 </section>
 
@@ -31,14 +37,14 @@
     }
 
     <div style="background:var(--bg);border-radius:16px;padding:40px;text-align:center;margin-top:48px;">
-      <h3>Still have a question?</h3>
-      <p style="color:var(--mid);margin:12px 0 24px;">Our team is happy to answer specific queries about your fleet size, vehicle types, or budget.</p>
+      <h3>@S(SiteSettingKeys.FaqStillHeading, "Still have a question?")</h3>
+      <p style="color:var(--mid);margin:12px 0 24px;">@S(SiteSettingKeys.FaqStillText, "Our team is happy to answer specific queries about your fleet size, vehicle types, or budget.")</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-        <a href="/contact" class="btn btn-primary">Contact Us</a>
-        <a href="https://wa.me/919260202020" class="btn" style="background:var(--green);color:var(--white);">WhatsApp</a>
+        <a href="/contact" class="btn btn-primary">@S(SiteSettingKeys.FaqStillContactLabel, "Contact Us")</a>
+        <a href="https://wa.me/@whatsapp" class="btn" style="background:var(--green);color:var(--white);">@S(SiteSettingKeys.FaqStillWhatsAppLabel, "WhatsApp")</a>
       </div>
     </div>
   </div>
 </section>
 
-@await Html.PartialAsync("_CtaBand", ("Still Have Questions?", "Our team is on-call. WhatsApp us, call, or drop a message - we reply within 4 hours.", "Send Us a Message"))
+@await Html.PartialAsync("_CtaBand", (S(SiteSettingKeys.CtaFaqTitle, "Still Have Questions?"), S(SiteSettingKeys.CtaFaqSubtitle, "Our team is on-call. WhatsApp us, call, or drop a message - we reply within 4 hours."), S(SiteSettingKeys.CtaFaqButton, "Send Us a Message")))

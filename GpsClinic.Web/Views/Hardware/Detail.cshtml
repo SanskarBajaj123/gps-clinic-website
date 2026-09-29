@@ -2,7 +2,9 @@
 @inject GpsClinic.Web.Data.ApplicationDbContext Db
 @{
     ViewData["Title"] = Model.Title;
-    var whatsapp = (await Db.SiteSettings.FindAsync(SiteSettingKeys.ContactWhatsApp))?.Value ?? "919260202020";
+    var settings = await Db.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
+    string S(string key, string fallback = "") => settings.TryGetValue(key, out var v) ? v : fallback;
+    var whatsapp = S(SiteSettingKeys.ContactWhatsApp, "919260202020");
     var tags = (Model.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
     var band = (Model.BandItems ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
 }
@@ -15,7 +17,7 @@
       <div class="hero-left" style="padding-bottom:48px;">
         <span class="hw-category-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="10"/></svg>
-          Hardware Product
+          @S(SiteSettingKeys.HwDetailBadge, "Hardware Product")
         </span>
         <h1 class="hero-h1" style="margin-bottom:14px;">@Model.Title</h1>
         @if (!string.IsNullOrEmpty(Model.Tagline)) { <p class="hero-sub">@Model.Tagline</p> }
@@ -31,10 +33,10 @@
         <div class="hero-ctas">
           <a href="https://wa.me/@whatsapp?text=I+am+interested+in+@Uri.EscapeDataString(Model.Title)" class="btn btn--green" target="_blank" rel="noopener">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.998 2C6.476 2 2 6.478 2 12.002c0 1.97.56 3.807 1.533 5.367L2 22l4.784-1.525A9.942 9.942 0 0011.998 22c5.523 0 9.999-4.477 9.999-10.002C21.997 6.476 17.521 2 11.998 2z"/></svg>
-            Enquire on WhatsApp
+            @S(SiteSettingKeys.HwDetailWhatsAppCta, "Enquire on WhatsApp")
           </a>
-          <a href="/contact" class="btn btn--orange">Get a Quote</a>
-          <a href="/hardware" class="btn btn--ghost">← All Hardware</a>
+          <a href="/contact" class="btn btn--orange">@S(SiteSettingKeys.HwDetailQuoteCta, "Get a Quote")</a>
+          <a href="/hardware" class="btn btn--ghost">@S(SiteSettingKeys.HwDetailBackCta, "← All Hardware")</a>
         </div>
       </div>
       <div class="hero-right hw-hero-img-wrap">
@@ -44,7 +46,7 @@
         }
         else
         {
-          <div class="hw-hero-img-placeholder"><span>Product image coming soon</span></div>
+          <div class="hw-hero-img-placeholder"><span>@S(SiteSettingKeys.HwDetailImagePlaceholder, "Product image coming soon")</span></div>
         }
       </div>
     </div>
@@ -72,11 +74,11 @@
       <div style="flex:1;">
         <div class="post-content">@Html.Raw(Model.ContentHtml)</div>
         <div class="gps-disclaimer" style="margin-top:32px;">
-          <p><strong>GPS Accuracy Notice:</strong> GPS tracking accuracy is dependent on satellite signal availability, environmental factors (tall buildings, tunnels, dense vegetation), and device firmware. Typical accuracy is 5–10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.</p>
+          <p><strong>GPS Accuracy Notice:</strong> @S(SiteSettingKeys.HwDetailDisclaimer, "GPS tracking accuracy is dependent on satellite signal availability, environmental factors (tall buildings, tunnels, dense vegetation), and device firmware. Typical accuracy is 5-10 metres under open-sky conditions. GPS Clinic does not guarantee exact real-time positioning in all conditions.")</p>
         </div>
       </div>
       <div style="flex:0 0 300px;">
-        @{ ViewData["FormHeading"] = "Enquire About This Product"; ViewData["FormSub"] = "We'll call you back within 4 hours."; ViewData["SubmitLabel"] = "Send Enquiry"; }
+        @{ ViewData["FormHeading"] = S(SiteSettingKeys.HwDetailFormHeading, "Enquire About This Product"); ViewData["FormSub"] = S(SiteSettingKeys.HwDetailFormSub, "We'll call you back within 4 hours."); ViewData["SubmitLabel"] = S(SiteSettingKeys.HwDetailFormSubmit, "Send Enquiry"); }
         @await Html.PartialAsync("_EnquiryForm", Model.Title)
       </div>
     </div>
@@ -84,11 +86,11 @@
 </section>
 
 <section class="hw-cta-band">
-  <h2>Ready to Install @Model.Title?</h2>
-  <p>Our technicians cover Chhatrapati Sambhajinagar and surrounding districts.</p>
+  <h2>@string.Format(S(SiteSettingKeys.HwDetailCtaTitleTemplate, "Ready to Install {0}?"), Model.Title)</h2>
+  <p>@S(SiteSettingKeys.HwDetailCtaSubtitle, "Our technicians cover Chhatrapati Sambhajinagar and surrounding districts.")</p>
   <div class="btn-row">
-    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">WhatsApp Us</a>
-    <a href="/contact" class="btn btn--orange">Get a Quote</a>
-    <a href="/hardware" class="btn btn--ghost">View All Hardware</a>
+    <a href="https://wa.me/@whatsapp" class="btn btn--green" target="_blank" rel="noopener">@S(SiteSettingKeys.HwDetailCtaWhatsApp, "WhatsApp Us")</a>
+    <a href="/contact" class="btn btn--orange">@S(SiteSettingKeys.HwDetailCtaQuote, "Get a Quote")</a>
+    <a href="/hardware" class="btn btn--ghost">@S(SiteSettingKeys.HwDetailCtaAllProducts, "View All Hardware")</a>
   </div>
 </section>
