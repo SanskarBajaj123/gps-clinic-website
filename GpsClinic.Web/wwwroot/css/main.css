@@ -1021,7 +1021,7 @@ p { line-height: 1.7; }
 ───────────────────────────────────────────────── */
 .hw-hero-section {
   background: var(--navy);
-  padding: 72px 24px 0;
+  padding: 72px 24px;
   position: relative;
   overflow: hidden;
 }

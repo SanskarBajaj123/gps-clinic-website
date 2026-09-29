@@ -1,5 +1,6 @@
 using GpsClinic.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace GpsClinic.Web.Data.Seed;
 
@@ -8,6 +9,12 @@ public static class DbSeeder
     public static async Task SeedAsync(ApplicationDbContext db, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         db.Database.EnsureCreated();
+
+        // EnsureCreated() only builds the schema when the database has no tables at
+        // all - it does nothing for a table added to the model after the DB already
+        // existed (e.g. the production Postgres instance). Create MediaFiles here
+        // explicitly so it doesn't matter which came first.
+        await EnsureMediaFilesTableAsync(db);
 
         await SeedAdminAsync(userManager, roleManager);
 
@@ -210,6 +217,41 @@ public static class DbSeeder
         }
 
         await db.SaveChangesAsync();
+    }
+
+    private static async Task EnsureMediaFilesTableAsync(ApplicationDbContext db)
+    {
+        var providerName = db.Database.ProviderName ?? "";
+        string sql;
+        if (providerName.Contains("Npgsql"))
+        {
+            sql = @"CREATE TABLE IF NOT EXISTS ""MediaFiles"" (
+                ""Id"" character varying(32) NOT NULL PRIMARY KEY,
+                ""ContentType"" character varying(100) NOT NULL,
+                ""Data"" bytea NOT NULL,
+                ""CreatedAt"" timestamp with time zone NOT NULL
+            );";
+        }
+        else if (providerName.Contains("Sqlite"))
+        {
+            sql = @"CREATE TABLE IF NOT EXISTS ""MediaFiles"" (
+                ""Id"" TEXT NOT NULL PRIMARY KEY,
+                ""ContentType"" TEXT NOT NULL,
+                ""Data"" BLOB NOT NULL,
+                ""CreatedAt"" TEXT NOT NULL
+            );";
+        }
+        else
+        {
+            sql = @"IF NOT EXISTS (SELECT * FROM sysobjects WHERE name='MediaFiles' AND xtype='U')
+            CREATE TABLE [MediaFiles] (
+                [Id] nvarchar(32) NOT NULL PRIMARY KEY,
+                [ContentType] nvarchar(100) NOT NULL,
+                [Data] varbinary(max) NOT NULL,
+                [CreatedAt] datetime2 NOT NULL
+            );";
+        }
+        await db.Database.ExecuteSqlRawAsync(sql);
     }
 
     private static async Task SeedAdminAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
