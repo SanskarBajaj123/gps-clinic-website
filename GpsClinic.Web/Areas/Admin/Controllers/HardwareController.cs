@@ -20,10 +20,11 @@ public class HardwareController : AdminControllerBase
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Title"] = "New Hardware Product";
-        return RenderPartialOrPage("_Form", new HardwareProduct { SortOrder = 99, IsPublished = true });
+        var nextSortOrder = await _db.HardwareProducts.AnyAsync() ? await _db.HardwareProducts.MaxAsync(h => h.SortOrder) + 1 : 1;
+        return RenderPartialOrPage("_Form", new HardwareProduct { SortOrder = nextSortOrder, IsPublished = true });
     }
 
     [HttpPost("create")]

@@ -20,10 +20,11 @@ public class WhyUsController : AdminControllerBase
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Title"] = "New Feature";
-        return RenderPartialOrPage("_Form", new WhyUsFeature { SortOrder = 99 });
+        var nextSortOrder = await _db.WhyUsFeatures.AnyAsync() ? await _db.WhyUsFeatures.MaxAsync(f => f.SortOrder) + 1 : 1;
+        return RenderPartialOrPage("_Form", new WhyUsFeature { SortOrder = nextSortOrder });
     }
 
     [HttpPost("create")]

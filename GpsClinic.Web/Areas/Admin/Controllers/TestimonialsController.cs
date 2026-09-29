@@ -20,10 +20,11 @@ public class TestimonialsController : AdminControllerBase
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Title"] = "New Testimonial";
-        return RenderPartialOrPage("_Form", new Testimonial { Rating = 5, SortOrder = 99 });
+        var nextSortOrder = await _db.Testimonials.AnyAsync() ? await _db.Testimonials.MaxAsync(t => t.SortOrder) + 1 : 1;
+        return RenderPartialOrPage("_Form", new Testimonial { Rating = 5, SortOrder = nextSortOrder });
     }
 
     [HttpPost("create")]

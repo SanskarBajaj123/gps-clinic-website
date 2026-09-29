@@ -20,10 +20,11 @@ public class IndustriesController : AdminControllerBase
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Title"] = "New Industry";
-        return RenderPartialOrPage("_Form", new Industry { SortOrder = 99 });
+        var nextSortOrder = await _db.Industries.AnyAsync() ? await _db.Industries.MaxAsync(i => i.SortOrder) + 1 : 1;
+        return RenderPartialOrPage("_Form", new Industry { SortOrder = nextSortOrder });
     }
 
     [HttpPost("create")]

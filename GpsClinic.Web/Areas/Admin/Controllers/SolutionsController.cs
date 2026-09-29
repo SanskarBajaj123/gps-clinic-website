@@ -20,10 +20,11 @@ public class SolutionsController : AdminControllerBase
     }
 
     [HttpGet("create")]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Title"] = "New Solution";
-        return RenderPartialOrPage("_Form", new SolutionProduct { SortOrder = 99, IsPublished = true });
+        var nextSortOrder = await _db.Solutions.AnyAsync() ? await _db.Solutions.MaxAsync(s => s.SortOrder) + 1 : 1;
+        return RenderPartialOrPage("_Form", new SolutionProduct { SortOrder = nextSortOrder, IsPublished = true });
     }
 
     [HttpPost("create")]
