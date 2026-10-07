@@ -1340,7 +1340,6 @@ p { line-height: 1.7; }
   gap: 18px;
 }
 .sol-grid--home { grid-template-columns: repeat(3, 1fr); }
-.sol-grid--home .sol-tile-top { aspect-ratio: 2/1; }
 .sol-grid--home .sol-tile-icon { width: 40px; height: 40px; }
 .sol-grid--home .sol-tile-body { padding: 14px 16px 16px; }
 .sol-grid--home .sol-tile-body h3 { font-size: 14px; }
