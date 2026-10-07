@@ -144,11 +144,20 @@
         {
           var tags = (sol.Tags ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(3).ToList();
           <article class="sol-tile">
-            <a href="/solutions/@sol.Slug" class="sol-tile-top" style="background:@IconHelper.Gradient(sol.IconKey);" aria-hidden="true" tabindex="-1">
-              <div class="sol-tile-circle sol-tile-circle--1"></div>
-              <div class="sol-tile-circle sol-tile-circle--2"></div>
-              <svg class="sol-tile-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" aria-hidden="true">@Html.Raw(IconHelper.Path(sol.IconKey))</svg>
-            </a>
+            @if (!string.IsNullOrEmpty(sol.CardImagePath))
+            {
+              <a href="/solutions/@sol.Slug" class="sol-tile-top sol-tile-top--img" tabindex="-1">
+                <img src="@sol.CardImagePath" alt="@sol.Title" loading="lazy">
+              </a>
+            }
+            else
+            {
+              <a href="/solutions/@sol.Slug" class="sol-tile-top" style="background:@IconHelper.Gradient(sol.IconKey);" aria-hidden="true" tabindex="-1">
+                <div class="sol-tile-circle sol-tile-circle--1"></div>
+                <div class="sol-tile-circle sol-tile-circle--2"></div>
+                <svg class="sol-tile-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="1.6" aria-hidden="true">@Html.Raw(IconHelper.Path(sol.IconKey))</svg>
+              </a>
+            }
             <div class="sol-tile-body">
               <h3><a href="/solutions/@sol.Slug">@sol.Title</a></h3>
               @if (tags.Any())

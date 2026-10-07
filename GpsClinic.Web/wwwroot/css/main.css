@@ -1366,6 +1366,7 @@ p { line-height: 1.7; }
   overflow: hidden;
   text-decoration: none;
 }
+.sol-tile-top--img img { width: 100%; height: 100%; object-fit: cover; }
 .sol-tile-circle {
   position: absolute;
   border-radius: 50%;

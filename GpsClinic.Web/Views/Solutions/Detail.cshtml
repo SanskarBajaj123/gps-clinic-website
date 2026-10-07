@@ -11,16 +11,41 @@
 <section class="page-hero">
   <div class="container page-hero-inner">
     <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="bc-sep">›</span><a href="/solutions">Solutions</a><span class="bc-sep">›</span><span>@Model.Title</span></nav>
-    @if (!string.IsNullOrEmpty(Model.Industry))
+    @if (string.IsNullOrEmpty(Model.HeroImagePath))
     {
-      <span style="display:inline-block;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;background:rgba(0,164,154,0.12);border:1px solid rgba(0,164,154,0.28);border-radius:20px;padding:4px 12px;">@Model.Industry</span>
+      @if (!string.IsNullOrEmpty(Model.Industry))
+      {
+        <span style="display:inline-block;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;background:rgba(0,164,154,0.12);border:1px solid rgba(0,164,154,0.28);border-radius:20px;padding:4px 12px;">@Model.Industry</span>
+      }
+      <h1>@Model.Title</h1>
+      @if (!string.IsNullOrEmpty(Model.Tagline)) { <p>@Model.Tagline</p> }
+      @if (tags.Any())
+      {
+        <div class="card-tags" style="margin-top:16px;">
+          @foreach (var tag in tags) { <span class="card-tag" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">@tag</span> }
+        </div>
+      }
     }
-    <h1>@Model.Title</h1>
-    @if (!string.IsNullOrEmpty(Model.Tagline)) { <p>@Model.Tagline</p> }
-    @if (tags.Any())
+    else
     {
-      <div class="card-tags" style="margin-top:16px;">
-        @foreach (var tag in tags) { <span class="card-tag" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">@tag</span> }
+      <div class="hero-flex" style="align-items:center;">
+        <div class="hero-left">
+          @if (!string.IsNullOrEmpty(Model.Industry))
+          {
+            <span style="display:inline-block;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;background:rgba(0,164,154,0.12);border:1px solid rgba(0,164,154,0.28);border-radius:20px;padding:4px 12px;">@Model.Industry</span>
+          }
+          <h1>@Model.Title</h1>
+          @if (!string.IsNullOrEmpty(Model.Tagline)) { <p>@Model.Tagline</p> }
+          @if (tags.Any())
+          {
+            <div class="card-tags" style="margin-top:16px;">
+              @foreach (var tag in tags) { <span class="card-tag" style="background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);">@tag</span> }
+            </div>
+          }
+        </div>
+        <div class="hero-right hw-hero-img-wrap">
+          <img src="@Model.HeroImagePath" alt="@Model.Title" loading="eager">
+        </div>
       </div>
     }
   </div>
